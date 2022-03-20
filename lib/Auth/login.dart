@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:car_washer/Auth/register.dart';
+import 'package:car_washer/Helper/request_helper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -25,6 +26,9 @@ class login extends StatefulWidget{
 class _loginstate extends State<login> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  request_helper request_help = new request_helper();
+  url_helper.Constants constants = new url_helper.Constants();
+
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String deviceName="";
@@ -62,74 +66,44 @@ class _loginstate extends State<login> {
         ,);
     }
 
-    // Future<http.Response> sendLogin() async {
-    //   url_helper.Constants constants = new url_helper.Constants();
-    //   final prefs = await SharedPreferences.getInstance();
-    //   return http.post(
-    //     Uri.parse(constants.login),
-    //     headers: <String, String>{
-    //       'Content-Type': 'application/json; charset=UTF-8',
-    //     },
-    //     body: jsonEncode(<String, dynamic>{
-    //       "grant_type" : "password",
-    //       "client_id"  : constants.client_id ,
-    //       "client_secret": constants.client_secret,
-    //       "email":"mhm@gmail.com",
-    //       "password":"123456",
-    //       "scope":"",
-    //       "device_type": prefs.getString('action'),
-    //       "device_id":"7a28b3ccb4cf1171",
-    //       "device_token":"fGuV42N4RPWa9WYFE84ddt:APA91bGY69pWrcaYQmgMwGZy1DUu73qZaYGT5U2XwLIWL0-JJvMJg4L9C6_WW-HjvvxRrZ2K3xnb7eqklySB6aw61Bqfyp5jmcJANacXRKGV8iEKmWlb4VJrhm4jOblvvs2EUf-74SqP",
-    //       "logged_in": 1
-    //     }),
-    //   );
-    // }
-
     Future<void> signin() async {
       //here _emailController.text
       WidgetsFlutterBinding.ensureInitialized();
+
+      final prefs = await SharedPreferences.getInstance();
       // check error waiting
       FirebaseMessaging.instance.getToken().then((token) async {
         getDeviceDetails();
-        final prefs = await SharedPreferences.getInstance();
+
         await prefs.setString('device_token', token!);
-        url_helper.Constants constants = new url_helper.Constants();
-        print(prefs.getString("deviceVersion"));
-        print(prefs.getString("identifier"));
-        var response = await http.post(Uri.parse("https://lamaah.ae/api/provider/oauth/token"),
-            headers: <String, String>{
-                     'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, dynamic>{
 
-            "grant_type" : "password",
-            "client_id"  : constants.client_id  ,
-            "client_secret": constants.client_secret,
-            "email":_emailController.text,
-            "password":_passwordController.text,
-            "scope":"",
-              "device_type": prefs.getString("deviceVersion"),
-              "device_id":prefs.getString("identifier"),
-            "device_token":prefs.getString("deviceVersion"),
+        Uri uri = Uri.parse(constants.login);
+        Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
+        Map<String, dynamic> body = {
+          "grant_type" : "password",
+          "client_id"  : constants.client_id  ,
+          "client_secret": constants.client_secret,
+          "email":_emailController.text,
+          "password":_passwordController.text,
+          "device_type": prefs.getString("deviceVersion"),
+          "device_id":prefs.getString("identifier"),
+          "device_token":prefs.getString("deviceVersion")
+        };
+        request_help.requestPost(uri, header, body).then((response) {
+          if(response.statusCode == 200){
+            print("Done");
+            print(response.body);
+          }else if(response.statusCode == 401){
+            //show error email or pasword in correct
+            print(response.statusCode);
+          }else{
+            //show error : else if internet connection lost or something error
+            print(response.statusCode);
 
+          }
+        });
 
-        }));
-
-        if(response.statusCode == 200){
-          print("Done");
-          print(response.body);
-        }else if(response.statusCode == 401){
-          //show error email or pasword in correct
-          print(response.statusCode);
-        }else{
-          //show error : else if internet connection lost or something error
-          print(response.statusCode);
-
-      }});
-
-      //http request to https://lamaah.ae/api/provider/oauth/token
-      // sendLogin();
-      // var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
+      });
 
       }
 
