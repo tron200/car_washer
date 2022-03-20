@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
+import 'package:car_washer/Helper/URLHelper.kt';
 
 class login extends StatefulWidget{
   static String id = 'login_screen';
@@ -53,13 +54,17 @@ class _loginstate extends State<login> {
       WidgetsFlutterBinding.ensureInitialized();
       FirebaseMessaging.instance.getToken().then((token){
         print("token $token");
+        //save token in shared prefrence
         getDeviceDetails().then((resultat){
           List yourlist =[];
           setState(() =>  yourlist.add(resultat));
           print(yourlist);
+          //save device data in shared prefrence
           });
 
       });
+
+      //http request to https://lamaah.ae/api/provider/oauth/token
     }
 
     TextEditingController _emailController = TextEditingController();
