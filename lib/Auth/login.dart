@@ -1,13 +1,17 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:car_washer/Auth/register.dart';
 import 'package:device_info/device_info.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
-
+import 'package:car_washer/Helper/url_helper.dart' as url_helper;
+import 'package:http/http.dart' as http;
 class login extends StatefulWidget{
   static String id = 'login_screen';
 
@@ -19,8 +23,10 @@ class login extends StatefulWidget{
 
 
 class _loginstate extends State<login> {
-
-  static Future<List<String>> getDeviceDetails() async {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  static Future<bool> getDeviceDetails() async {
+    final prefs = await SharedPreferences.getInstance();
     String deviceName="";
     String deviceVersion="";
     String identifier="";
@@ -31,18 +37,21 @@ class _loginstate extends State<login> {
         deviceName = build.model;
         deviceVersion = build.version.toString();
         identifier = build.androidId;  //UUID for Android
+        await prefs.setString('deviceVersion', "android");
       } else if (Platform.isIOS) {
         var data = await deviceInfoPlugin.iosInfo;
         deviceName = data.name;
         deviceVersion = data.systemVersion;
         identifier = data.identifierForVendor;  //UUID for iOS
+        await prefs.setString('deviceVersion', "ios");
       }
     } on PlatformException {
       print('Failed to get platform version');
     }
-
+    await prefs.setString('deviceName', deviceName);
+    await prefs.setString('identifier', identifier);
     //if (!mounted) return;
-    return [deviceName, deviceVersion, identifier];
+    return true;
   }
   @override
   Widget build(BuildContext context) {
@@ -52,26 +61,81 @@ class _loginstate extends State<login> {
             builder: (context) => register())
         ,);
     }
-    void signin(){
+
+    // Future<http.Response> sendLogin() async {
+    //   url_helper.Constants constants = new url_helper.Constants();
+    //   final prefs = await SharedPreferences.getInstance();
+    //   return http.post(
+    //     Uri.parse(constants.login),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //     body: jsonEncode(<String, dynamic>{
+    //       "grant_type" : "password",
+    //       "client_id"  : constants.client_id ,
+    //       "client_secret": constants.client_secret,
+    //       "email":"mhm@gmail.com",
+    //       "password":"123456",
+    //       "scope":"",
+    //       "device_type": prefs.getString('action'),
+    //       "device_id":"7a28b3ccb4cf1171",
+    //       "device_token":"fGuV42N4RPWa9WYFE84ddt:APA91bGY69pWrcaYQmgMwGZy1DUu73qZaYGT5U2XwLIWL0-JJvMJg4L9C6_WW-HjvvxRrZ2K3xnb7eqklySB6aw61Bqfyp5jmcJANacXRKGV8iEKmWlb4VJrhm4jOblvvs2EUf-74SqP",
+    //       "logged_in": 1
+    //     }),
+    //   );
+    // }
+
+    Future<void> signin() async {
       //here _emailController.text
       WidgetsFlutterBinding.ensureInitialized();
-      FirebaseMessaging.instance.getToken().then((token){
-        print("token $token");
-        //save token in shared prefrence
-        getDeviceDetails().then((resultat){
-          List yourlist =[];
-          setState(() =>  yourlist.add(resultat));
-          print(yourlist);
-          //save device data in shared prefrence
-          });
+      // check error waiting
+      FirebaseMessaging.instance.getToken().then((token) async {
+        getDeviceDetails();
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('device_token', token!);
+        url_helper.Constants constants = new url_helper.Constants();
+        print(prefs.getString("deviceVersion"));
+        print(prefs.getString("identifier"));
+        var response = await http.post(Uri.parse("https://lamaah.ae/api/provider/oauth/token"),
+            headers: <String, String>{
+                     'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: jsonEncode(<String, dynamic>{
 
-      });
+            "grant_type" : "password",
+            "client_id"  : constants.client_id  ,
+            "client_secret": constants.client_secret,
+            "email":_emailController.text,
+            "password":_passwordController.text,
+            "scope":"",
+              "device_type": prefs.getString("deviceVersion"),
+              "device_id":prefs.getString("identifier"),
+            "device_token":prefs.getString("deviceVersion"),
+
+
+        }));
+
+        if(response.statusCode == 200){
+          print("Done");
+          print(response.body);
+        }else if(response.statusCode == 401){
+          //show error email or pasword in correct
+          print(response.statusCode);
+        }else{
+          //show error : else if internet connection lost or something error
+          print(response.statusCode);
+
+      }});
 
       //http request to https://lamaah.ae/api/provider/oauth/token
-    }
+      // sendLogin();
+      // var response = await http.post(url, body: {'name': 'doodle', 'color': 'blue'});
 
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
+      }
+
+
+
+
     return Scaffold(
         body: SingleChildScrollView(
           child: Container(
