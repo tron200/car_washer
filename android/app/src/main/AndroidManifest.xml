@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lamaah.driver">
+    package="com.lamaah.washer">
    <application
         android:label="car_washer"
         android:name="${applicationName}"
