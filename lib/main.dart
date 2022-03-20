@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Auth/login.dart';
 import 'package:sizer/sizer.dart';
-
+import 'screens/homeScreen.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -24,7 +24,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.red,
         ),
-        home: login(),
+        home: HomeScreen(),
+
         routes: {
           'login' : (context) => login(),
           'register': (context) => register(),
