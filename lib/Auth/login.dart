@@ -52,6 +52,7 @@ class _loginstate extends State<login> {
             builder: (context) => register())
         ,);
     }
+
     void signin(){
       //here _emailController.text
       WidgetsFlutterBinding.ensureInitialized();
@@ -68,6 +69,13 @@ class _loginstate extends State<login> {
       });
 
       //http request to https://lamaah.ae/api/provider/oauth/token
+    }
+    void facebookLogin(){
+      // aho yasta
+    }
+
+    void googleLogin(){
+      // aho tany
     }
 
     TextEditingController _emailController = TextEditingController();
@@ -218,17 +226,49 @@ class _loginstate extends State<login> {
                                   borderRadius: BorderRadius.all(Radius.circular(50)),
                                   color: Color(0xff3fbcef)
                               ),
-                              child: const Padding(
+                              child: Padding(
                                 padding: EdgeInsets.all(12.0),
-                                child: Text('Login with Facebook',
+                                child: TextButton(
+                                  onPressed: facebookLogin,
+                                  child: Text('Login with Facebook',
                                   style: TextStyle(color: Colors.white,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold
                                   ),
                                 ),
                               ),
+                              )
+                            )
+
                             ),
+                          SizedBox(height: 1.2.h,),
+                          GestureDetector(
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  width: MediaQuery
+                                      .of(context)
+                                      .size
+                                      .width,
+                                  decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                                      color: Colors.red
+                                  ),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(12.0),
+                                    child: TextButton(
+                                      onPressed: googleLogin,
+                                      child: Text('Login with Google',
+                                        style: TextStyle(color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                              )
+
                           ),
+
                           Row(
                             children: [
                               Text("You don't have an account?",style: TextStyle(color: Colors.black),),
