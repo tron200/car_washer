@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:car_washer/Auth/register.dart';
 import 'package:flutter/material.dart';
 import 'Auth/login.dart';
 import 'package:sizer/sizer.dart';
@@ -22,6 +23,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.red,
         ),
         home: login(),
+        routes: {
+          'login' : (context) => login(),
+          'register': (context) => register(),
+        },
 
       );
     });

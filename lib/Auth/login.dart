@@ -1,12 +1,12 @@
 import 'dart:io' show Platform;
 
+import 'package:car_washer/Auth/register.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
-import 'package:car_washer/Helper/URLHelper.kt';
 
 class login extends StatefulWidget{
   static String id = 'login_screen';
@@ -47,7 +47,10 @@ class _loginstate extends State<login> {
   @override
   Widget build(BuildContext context) {
     void click() {
-
+      Navigator.push(context,
+        MaterialPageRoute(
+            builder: (context) => register())
+        ,);
     }
     void signin(){
       //here _emailController.text

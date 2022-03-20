@@ -1,0 +1,13 @@
+{
+
+  "services":[
+  {
+    "id": 19,
+    "name": "carwash"
+  },
+  {
+    "id": 20,
+    "name": "bus"
+  }
+  ]
+}
