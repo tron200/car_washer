@@ -6,9 +6,12 @@ import 'package:car_washer/Helper/request_helper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:car_washer/Helper/url_helper.dart' as url_helper;
@@ -65,9 +68,116 @@ class _loginstate extends State<login> {
             builder: (context) => register())
         ,);
     }
-    void facebookLogin() {}
-    void googleLogin() {}
 
+
+    Future<UserCredential> signInWithFacebook() async {
+      // Trigger the sign-in flow
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      // Create a credential from the access token
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+      // Once signed in, return the UserCredential
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    }
+    Future<void> facebookLogin() async {
+      WidgetsFlutterBinding.ensureInitialized();
+      final prefs = await SharedPreferences.getInstance();
+      signInWithFacebook().then((UserCredential) async {
+        await prefs.setString('device_token', UserCredential.credential!.token.toString());
+        print("Ftoken ${UserCredential.credential!.token.toString()}");
+      });
+    }
+
+    Future<User?> signInWithGoogle({required BuildContext context}) async {
+      FirebaseAuth auth = FirebaseAuth.instance;
+      User? user;
+
+      if (kIsWeb) {
+        GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+        try {
+          final UserCredential userCredential =
+          await auth.signInWithPopup(authProvider);
+
+          user = userCredential.user;
+        } catch (e) {
+          print(e);
+        }
+      } else {
+        final GoogleSignIn googleSignIn = GoogleSignIn();
+
+        final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+
+        if (googleSignInAccount != null) {
+
+          await googleSignInAccount.authentication.then((googleSignInAuthentication) async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString("accessToken", googleSignInAuthentication.accessToken!);
+            final AuthCredential credential = GoogleAuthProvider.credential(
+              accessToken: googleSignInAuthentication.accessToken,
+              idToken: googleSignInAuthentication.idToken,
+            );
+            try {
+              final UserCredential userCredential =
+              await auth.signInWithCredential(credential);
+
+              user = userCredential.user;
+            } on FirebaseAuthException catch (e) {
+              if (e.code == 'account-exists-with-different-credential') {
+                // ...
+              } else if (e.code == 'invalid-credential') {
+                // ...
+              }
+            } catch (e) {
+              // ...
+            }
+          });
+
+        }
+      }
+
+      return user;
+    }
+
+    Future<void> googleLogin() async {
+        final prefs = await SharedPreferences.getInstance();
+        WidgetsFlutterBinding.ensureInitialized();
+        FirebaseMessaging.instance.getToken().then((Dtoken){
+        signInWithGoogle(context: context).then((user) async {
+
+            print("gtoken ${await prefs.getString("accessToken")}");
+            getDeviceDetails();
+            //GOOGLE_LOGIN
+            print(user?.displayName);
+            print(user?.email);
+            Uri uri = Uri.parse(constants.GOOGLE_LOGIN);
+            Map<String, dynamic> body = {
+              "device_type": await  prefs.getString("deviceVersion"),
+              "device_token": Dtoken,
+              "accessToken": await prefs.getString("accessToken"),
+              "device_id": await prefs.getString("identifier"),
+              "login_by": "google"
+              };
+            print(prefs.getString("deviceVersion"));
+            print(Dtoken);
+            print(await prefs.getString("accessToken"));
+            print(prefs.getString("identifier"));
+            print('google');
+            request_help.requestPost(uri, body).then((response){
+              if(response.statusCode == 200){
+                print(response.statusCode);
+                print(response.body);
+              }else{
+                print(response.statusCode);
+                print(response.body);
+              }
+            });
+
+          });
+        });
+    }
     Future<void> signin() async {
       //here _emailController.text
       WidgetsFlutterBinding.ensureInitialized();
@@ -80,7 +190,6 @@ class _loginstate extends State<login> {
         await prefs.setString('device_token', token!);
 
         Uri uri = Uri.parse(constants.login);
-        Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
         Map<String, dynamic> body = {
           "grant_type" : "password",
           "client_id"  : constants.client_id  ,
@@ -89,9 +198,9 @@ class _loginstate extends State<login> {
           "password":_passwordController.text,
           "device_type": prefs.getString("deviceVersion"),
           "device_id":prefs.getString("identifier"),
-          "device_token":prefs.getString("deviceVersion")
+          "device_token":prefs.getString("device_token")
         };
-        request_help.requestPost(uri, header, body).then((response) {
+        request_help.requestPost(uri, body).then((response) {
           if(response.statusCode == 200){
             print("Done");
             print(response.body);
