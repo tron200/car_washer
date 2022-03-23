@@ -199,7 +199,7 @@ class _loginstate extends State<login> {
         request_help.requestPost(uri, body).then((response) {
           if(response.statusCode == 200){
             print("Done");
-            print(response.body);
+            Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
           }else if(response.statusCode == 401){
             //show error email or pasword in correct
             print(response.statusCode);
