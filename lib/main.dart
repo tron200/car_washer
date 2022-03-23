@@ -1,3 +1,15 @@
+import 'package:car_washer/screens/documentsScreen.dart';
+import 'package:car_washer/screens/earningScreen.dart';
+import 'package:car_washer/screens/editProfileScreen.dart';
+import 'package:car_washer/screens/editScreen.dart';
+import 'package:car_washer/screens/helpScreen.dart';
+import 'package:car_washer/screens/historyScreen.dart';
+import 'package:car_washer/screens/homeScreen.dart';
+import 'package:car_washer/screens/notificationScreen.dart';
+import 'package:car_washer/screens/profileScreen.dart';
+import 'package:car_washer/screens/reviewScreen.dart';
+import 'package:car_washer/screens/summaryScreen.dart';
+import 'package:car_washer/screens/withdrawScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:car_washer/Auth/register.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +31,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType){
       return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Car Washer',
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.blue,
         ),
-        home: login(),
+        home: HomeScreen(),
 
         routes: {
           'login' : (context) => login(),
           'register': (context) => register(),
+          'home': (context) => HomeScreen(),
+          'document': (context) => DocumentScreen(),
+          'profile': (context) => ProfileScreen(),
+          'editprofile': (context) => EditProfileScreen(),
+          'summary': (context) => SummaryScreen(),
+          'earning': (context) => EarningScreen(),
+          'withdraw': (context) => WithdrawScreen(),
+          'history': (context) => HistoryScreen(),
+          'notification': (context) => NotificationScreen(),
+          'help': (context) => HelpScreen(),
+          'review': (context) => ReviewScreen(),
+          'edit': (context) => EditScreen(name: "sdv", Editingvalue: "dsv"),
         },
 
       );

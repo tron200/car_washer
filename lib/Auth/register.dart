@@ -1,10 +1,10 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizer/sizer.dart';
-import 'login.dart';
 
 class register extends StatefulWidget{
   static String id = 'register_screen';
@@ -17,8 +17,64 @@ class register extends StatefulWidget{
 
 
 class _registerstate extends State<register> {
+
+  Widget getTableWidgets(List<dynamic> strings)
+  {
+    List<TableRow> list = <TableRow>[];
+    list.add(TableRow(
+        children: [
+          TableCell(child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Text("Available"),
+          )),
+          TableCell(child: Padding(
+            padding: EdgeInsets.all(12),
+            child: Text("Service Name"),
+          )),
+          TableCell(child: Padding(padding: EdgeInsets.all(12),child: Text("Service Price (AED)"),))
+
+        ]
+    ));
+    for(var i = 0; i < strings.length; i++){
+      list.add(new TableRow(children: [
+            TableCell(
+              child: Checkbox(
+                value: values[i],
+                onChanged: (bool? value){
+                setState(() {
+                  values[i] = value!;
+                });
+            }),),
+            TableCell(child: Padding(
+              padding: EdgeInsets.all(12),
+              child: Text(strings[i]["name"]),
+            )),
+            TableCell(child:  TextField(
+
+                  decoration: InputDecoration(
+                    hintText: "Service Price (AED)",
+                  ),
+                )
+
+            )
+       ]
+        ,)
+      );
+    }
+    return new Table(
+      border: TableBorder.all(),
+      columnWidths: const <int, TableColumnWidth>{
+        0: FixedColumnWidth(85),
+        1: FlexColumnWidth(),
+        2: FlexColumnWidth(),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: list,) ;
+  }
+
+
   List _services = [];
-  List<bool> values = [false, false];
+  List<bool> values = [false,false,false];
 
 
   Future<void> readJson() async {
@@ -30,12 +86,11 @@ class _registerstate extends State<register> {
   }
   @override
   Widget build(BuildContext context) {
+
     readJson();
     void click() {
-      Navigator.push(context,
-        MaterialPageRoute(
-            builder: (context) => login())
-        ,);
+      Navigator.pushNamed(context, 'login');
+
     }
     void register(){
       //here _emailController.text
@@ -168,42 +223,9 @@ class _registerstate extends State<register> {
                         ),
                       ),
                       SizedBox(height: 2.0.h,),
-                      Container(
-                        height: 20.0.h,
-                        child: ListView.builder(
-                          itemCount: _services.length,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              margin: EdgeInsets.symmetric(vertical: 10),
-                                child: Card(
-                                    child: Container(
-                                      child: Row(
-                                        children: [
-                                          Checkbox(value: values[index], onChanged: (bool? value){
-                                            values[index] = value!;
-                                          }),
-                                          Container(
-                                            width: 25.0.w,
-                                            child: Text(_services[index]["name"]),
-                                          ),
-                                          Expanded(
-                                              child: TextField(
 
-                                                decoration: InputDecoration(
-                                                  hintText: "Service Price (AED)",
+                      getTableWidgets(_services),
 
-                                                ),
-                                              )
-                                          )
-
-                                        ],
-                                      ),
-                                    )
-                                )
-                            );
-                          },
-                        ),
-                      ),
                       SizedBox(height: 1.2.h),
                       GestureDetector(
                         child: Container(

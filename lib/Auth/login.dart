@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:io' show Platform;
 
-import 'package:car_washer/Auth/register.dart';
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +13,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:car_washer/Helper/url_helper.dart' as url_helper;
-import 'package:http/http.dart' as http;
+
 class login extends StatefulWidget{
   static String id = 'login_screen';
 
@@ -63,10 +61,8 @@ class _loginstate extends State<login> {
   @override
   Widget build(BuildContext context) {
     void click() {
-      Navigator.push(context,
-        MaterialPageRoute(
-            builder: (context) => register())
-        ,);
+      Navigator.pushNamed(context, 'register');
+
     }
 
 
