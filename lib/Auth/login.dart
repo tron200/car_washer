@@ -179,6 +179,7 @@ class _loginstate extends State<login> {
               "device_id": await prefs.getString("identifier"),
               "login_by": "google"
               };
+            print(body);
             request_help.requestPost(uri, body).then((response){
               if(response.statusCode == 200){
                 print(response.statusCode);
