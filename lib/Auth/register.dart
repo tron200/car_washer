@@ -100,7 +100,6 @@ class _registerstate extends State<register> {
     TextEditingController _nameController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     TextEditingController _passwordconfirmController = TextEditingController();
-    TextEditingController _phoneController = TextEditingController();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -150,23 +149,7 @@ class _registerstate extends State<register> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 1.2.h,),
-                      Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width,
-                        height: 7.5.h,
-                        child:  TextField(
-                          controller: _phoneController,
-                          decoration: InputDecoration(
-                              labelText: "Phone",
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(8)),
-                              )
-                          ),
-                        ),
-                      ),
+
                       SizedBox(height: 1.2.h,),
                       Container(
                         width: MediaQuery
@@ -238,12 +221,15 @@ class _registerstate extends State<register> {
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               color: Color(0xff3fbcef)
                           ),
-                          child: const Padding(
+                          child:  Padding(
                             padding: EdgeInsets.all(12.0),
-                            child: Text('Register',
+                            child: TextButton(
+                              child: Text('Register',
                               style: TextStyle(color: Colors.white,
                                   fontSize: 20,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold)),
+                              onPressed: register,
+
                             ),
                           ),
                         ),
