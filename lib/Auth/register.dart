@@ -121,6 +121,10 @@ class _registerstate extends State<register> {
     });
   }
 
+    TextEditingController _emailController = TextEditingController();
+    TextEditingController _nameController = TextEditingController();
+    TextEditingController _passwordController = TextEditingController();
+    TextEditingController _passwordconfirmController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     readJson();
@@ -128,10 +132,6 @@ class _registerstate extends State<register> {
       Navigator.pushNamed(context, 'login');
     }
 
-    TextEditingController _emailController = TextEditingController();
-    TextEditingController _nameController = TextEditingController();
-    TextEditingController _passwordController = TextEditingController();
-    TextEditingController _passwordconfirmController = TextEditingController();
     void register() {
       //here _emailController.text
         //here _emailController.text
@@ -139,17 +139,18 @@ class _registerstate extends State<register> {
           final prefs = await SharedPreferences.getInstance();
           url_helper.Constants constants = new url_helper.Constants();
           request_helper request_help = new request_helper();
-          getDeviceDetails();
+          await getDeviceDetails();
           Uri uri = Uri.parse(constants.register);
           Map<String, dynamic> body = {
             "device_type": await prefs.getString('deviceVersion'),
             "device_id": await prefs.getString("identifier"),
             "device_token": Dtoken,
             "login_by": "manual",
-            "first_name": _nameController,
-            "email": _emailController,
-            "password": _passwordController,
-            "password_confirmation": _passwordconfirmController,
+            "first_name": _nameController.text,
+            "email": _emailController.text,
+            "password": _passwordController.text,
+            "password_confirmation": _passwordconfirmController.text,
+            "mobile": "0111511111"
           };
           request_help.requestPost(uri, body).then((response){
             if(response.statusCode == 200){
