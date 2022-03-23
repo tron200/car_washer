@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
           'notification': (context) => NotificationScreen(),
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
-          'edit': (context) => EditScreen(name: "sdv", Editingvalue: "dsv"),
         },
 
       );
