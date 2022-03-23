@@ -92,15 +92,17 @@ class _registerstate extends State<register> {
       Navigator.pushNamed(context, 'login');
 
     }
-    void register(){
-      //here _emailController.text
 
-    }
     TextEditingController _emailController = TextEditingController();
     TextEditingController _nameController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     TextEditingController _passwordconfirmController = TextEditingController();
     TextEditingController _phoneController = TextEditingController();
+    void register(){
+      //here _emailController.text
+
+
+    }
 
     return Scaffold(
       body: SingleChildScrollView(

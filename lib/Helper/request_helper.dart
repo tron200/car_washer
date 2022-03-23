@@ -9,4 +9,8 @@ class request_helper {
     return await http.post(uri, headers:header, body: jsonEncode(body));
   }
 
+  Future<http.Response> requestGet(Uri uri,Map<String, String> header) async{
+    return await http.get(uri, headers:header);
+  }
+
 }

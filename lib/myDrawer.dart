@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class myDrawer extends StatefulWidget {
@@ -15,13 +18,29 @@ class _myDrawerState extends State<myDrawer> {
   List<bool> isSelected = List<bool>.filled(9, false);
   String dropdownvalue = 'En';
 
+  Map<String,dynamic> userData ={"":""};
+
   // List of items in our dropdown menu
   var items = [
     'En',
     'Ar',
   ];
   @override
+  Future<void> setupUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    userData = await ( json.decode(await prefs.getString("user")!));
+    setState(() {});
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setupUserData();
+
+  }
+  @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
     isSelected[widget.index] = true;
     // TODO: implement build
     return Drawer(
@@ -79,7 +98,7 @@ class _myDrawerState extends State<myDrawer> {
                   ),
                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Jason Bor3y",style: TextStyle(
+                    child: Text("${userData['first_name']}" ,style: TextStyle(
                       fontSize: 18,
 
                     ),),

@@ -1,6 +1,13 @@
+import 'dart:convert';
+
+import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/myDrawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../Helper/url_helper.dart' as url_helper;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatefulWidget{
@@ -12,7 +19,40 @@ class _HomeScreenState extends State<HomeScreen>{
   String title = "Offline";
   bool value_switch = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  Map<String,dynamic> userData ={"":""};
 
+  request_helper requestHelp = new request_helper();
+  url_helper.Constants url_help = new url_helper.Constants();
+  Future<void> getProfileData() async {
+    final prefs = await SharedPreferences.getInstance();
+    FirebaseMessaging.instance.getToken().then((token) async {
+    Uri url = Uri.parse(url_help.USER_PROFILE_API);
+    var token = await prefs.getString("device_token");
+    print(token);
+    Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8',
+    };
+    print("Bearer ${token!}");
+    requestHelp.requestGet(url,header).then((responce) async {
+      if(responce.statusCode == 200) {
+        final String? user = responce.body;
+        print(user);
+        final data = await json.decode(user!);
+        userData = data;
+      }else{
+        print(responce.statusCode);
+      }
+    });
+
+      });
+
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getProfileData();
+  }
   @override
   Widget build(BuildContext context) {
     Color blue800 = Colors.blue.shade800;

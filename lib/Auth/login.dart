@@ -67,21 +67,46 @@ class _loginstate extends State<login> {
 
 
     Future<UserCredential> signInWithFacebook() async {
+      final prefs = await SharedPreferences.getInstance();
       // Trigger the sign-in flow
       final LoginResult loginResult = await FacebookAuth.instance.login();
 
       // Create a credential from the access token
       final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-
+      await prefs.setString("accessToken", loginResult.accessToken!.token);
       // Once signed in, return the UserCredential
       return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
     }
+
     Future<void> facebookLogin() async {
       WidgetsFlutterBinding.ensureInitialized();
       final prefs = await SharedPreferences.getInstance();
-      signInWithFacebook().then((UserCredential) async {
-        await prefs.setString('device_token', UserCredential.credential!.token.toString());
-        print("Ftoken ${UserCredential.credential!.token.toString()}");
+      FirebaseMessaging.instance.getToken().then((Dtoken){
+        signInWithFacebook().then((facebookAuthCredential) async {
+          await prefs.setString("device_token", Dtoken!);
+          await getDeviceDetails();
+          //FACEBOOK_signin
+
+          Uri uri = Uri.parse(constants.FACEBOOK_LOGIN);
+          Map<String, dynamic> body = {
+            "device_type": await  prefs.getString("deviceVersion"),
+            "device_token": Dtoken,
+            "accessToken": await prefs.getString("accessToken"),
+            "device_id": await prefs.getString("identifier"),
+            "login_by": "google"
+          };
+
+          request_help.requestPost(uri, body).then((response){
+            if(response.statusCode == 200){
+              print(response.statusCode);
+              print(response.body);
+            }else{
+              print(response.statusCode);
+              print(response.body);
+            }
+          });
+
+        });
       });
     }
 
@@ -144,10 +169,8 @@ class _loginstate extends State<login> {
         signInWithGoogle(context: context).then((user) async {
 
             print("gtoken ${await prefs.getString("accessToken")}");
-            getDeviceDetails();
+            await getDeviceDetails();
             //GOOGLE_LOGIN
-            print(user?.displayName);
-            print(user?.email);
             Uri uri = Uri.parse(constants.GOOGLE_LOGIN);
             Map<String, dynamic> body = {
               "device_type": await  prefs.getString("deviceVersion"),
@@ -156,11 +179,6 @@ class _loginstate extends State<login> {
               "device_id": await prefs.getString("identifier"),
               "login_by": "google"
               };
-            print(prefs.getString("deviceVersion"));
-            print(Dtoken);
-            print(await prefs.getString("accessToken"));
-            print(prefs.getString("identifier"));
-            print('google');
             request_help.requestPost(uri, body).then((response){
               if(response.statusCode == 200){
                 print(response.statusCode);
@@ -181,7 +199,7 @@ class _loginstate extends State<login> {
       final prefs = await SharedPreferences.getInstance();
       // check error waiting
       FirebaseMessaging.instance.getToken().then((token) async {
-        getDeviceDetails();
+        await getDeviceDetails();
 
         await prefs.setString('device_token', token!);
 
@@ -191,12 +209,14 @@ class _loginstate extends State<login> {
           "client_id"  : constants.client_id  ,
           "client_secret": constants.client_secret,
           "email":_emailController.text,
+          "scope": "",
+          "logged_in": "1",
           "password":_passwordController.text,
-          "device_type": prefs.getString("deviceVersion"),
-          "device_id":prefs.getString("identifier"),
-          "device_token":prefs.getString("device_token")
+          "device_type": await prefs.getString("deviceVersion"),
+          "device_id": await prefs.getString("identifier"),
+          "device_token": await prefs.getString("device_token")
         };
-        request_help.requestPost(uri, body).then((response) {
+        request_help.requestPost(uri, body).then((response) async {
           if(response.statusCode == 200){
             print("Done");
             Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
