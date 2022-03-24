@@ -24,6 +24,9 @@ class register extends StatefulWidget{
 
 
 class _registerstate extends State<register> {
+  List _services = [];
+  List<bool> values = List<bool>.filled(2, false);
+  bool va = false;
 
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
@@ -54,20 +57,30 @@ class _registerstate extends State<register> {
     return true;
   }
 
-  Widget getTableWidgets(List<dynamic> strings) {
+
+  Widget getTableWidgets(List<dynamic> strings , StateSetter setState) {
     List<TableRow> list = <TableRow>[];
     list.add(TableRow(
         children: [
-          TableCell(child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Text("Available"),
-          )),
-          TableCell(child: Padding(
-            padding: EdgeInsets.all(12),
-            child: Text("Service Name"),
-          )),
-          TableCell(child: Padding(
-            padding: EdgeInsets.all(12), child: Text("Service Price (AED)"),))
+          TableCell(
+
+            child: Text("Available", style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold
+            ),),
+          ),
+          TableCell(
+
+            child: Text("Service Name", style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold
+            )),
+          ),
+          TableCell(
+             child: Text("Service Price (AED)", style: TextStyle(
+                 fontSize: 12,
+                 fontWeight: FontWeight.bold
+             )),)
 
         ]
     ));
@@ -77,18 +90,21 @@ class _registerstate extends State<register> {
           child: Checkbox(
               value: values[i],
               onChanged: (bool? value) {
-                setState(() {
-                  values[i] = value!;
-                });
-              }),),
+                setState(() => values[i] = value!
+                );
+
+          }),),
         TableCell(child: Padding(
           padding: EdgeInsets.all(12),
-          child: Text(strings[i]["name"]),
+          child: Text(strings[i]["name"],  style: TextStyle(
+              fontSize: 14,
+          )),
         )),
         TableCell(child: TextField(
 
           decoration: InputDecoration(
             hintText: "Service Price (AED)",
+            contentPadding: EdgeInsets.all(2)
           ),
         )
 
@@ -100,17 +116,15 @@ class _registerstate extends State<register> {
     return new Table(
       border: TableBorder.all(),
       columnWidths: const <int, TableColumnWidth>{
-        0: FixedColumnWidth(85),
-        1: FlexColumnWidth(),
-        2: FlexColumnWidth(),
+        0: FlexColumnWidth(),
+        1: FixedColumnWidth(85),
+        2: FixedColumnWidth(80),
       },
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: list,);
   }
 
 
-  List _services = [];
-  List<bool> values = [false, false, false];
 
 
   Future<void> readJson() async {
@@ -155,6 +169,7 @@ class _registerstate extends State<register> {
           request_help.requestPost(uri, body).then((response){
             if(response.statusCode == 200){
               print("Done");
+              //Navigator.pushNamed(context, 'otp');
             }else{
               print(response.statusCode);
             }
@@ -275,7 +290,34 @@ class _registerstate extends State<register> {
                           ),
                           SizedBox(height: 2.0.h,),
 
-                          getTableWidgets(_services),
+                          TextButton(
+                            child: Text("Services"),
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+
+                                      scrollable: true,
+                                      title: Text('Services'),
+
+                                      content: StatefulBuilder(
+                                        builder: (BuildContext context, StateSetter setState) {
+                                           return getTableWidgets(_services, setState);
+                                        }),
+
+                                      actions: [
+                                        TextButton(
+                                            child: Text("Submit"),
+                                            onPressed: () {
+                                              // your code
+                                            })
+                                      ],
+                                    );
+                                  });
+                            },
+                          ),
+                          // getTableWidgets(_services),
 
                           SizedBox(height: 1.2.h),
                           GestureDetector(
@@ -331,4 +373,6 @@ class _registerstate extends State<register> {
         )
     );
   }
+
+
 }
