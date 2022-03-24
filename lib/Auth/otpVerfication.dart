@@ -87,10 +87,7 @@ class _otpVerficationState extends State<otpVerfication>{
                 child: TextField(
                   decoration: InputDecoration(
                       hintText: "Phone Number",
-                      prefix: Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Text(dialCodesDigits),
-                      )
+
                   ),
                   keyboardType: TextInputType.number,
                   controller: _phoneController,
