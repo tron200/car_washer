@@ -46,8 +46,9 @@ dependencies:
   flutter_facebook_sdk: ^1.0.0
   flutter_facebook_auth: ^4.1.2
   google_sign_in: ^5.2.4
+  country_code_picker: ^2.0.2
   flutter_login_facebook: ^1.4.1
-
+  pinput: ^1.2.0
 
 
 dev_dependencies:

@@ -1,3 +1,4 @@
+import 'package:car_washer/Auth/otpVerfication.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 import 'package:car_washer/screens/earningScreen.dart';
 import 'package:car_washer/screens/editProfileScreen.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
           'notification': (context) => NotificationScreen(),
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
+          'otp': (context) => otpVerfication(),
         },
 
       );
