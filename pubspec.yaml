@@ -49,6 +49,7 @@ dependencies:
   country_code_picker: ^2.0.2
   flutter_login_facebook: ^1.4.1
   pinput: ^1.2.0
+  flutter_easyloading: ^3.0.3
 
 
 dev_dependencies:

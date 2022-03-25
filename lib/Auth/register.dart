@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:device_info/device_info.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,7 +21,21 @@ class register extends StatefulWidget{
   _registerstate createState() => _registerstate();
 
 }
-
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.light
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+}
 
 
 class _registerstate extends State<register> {
@@ -134,6 +149,32 @@ class _registerstate extends State<register> {
       _services = data["services"];
     });
   }
+  Widget buildDialog(BuildContext context, String msg){
+    return AlertDialog(
+      content: Text(msg),
+      actions: [
+        TextButton(
+          child: Text('Ok'),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        )
+      ],
+    );
+  }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
+
+  }
+
+  void showError(String msg){
+    EasyLoading.showError(msg);
+  }
 
     TextEditingController _emailController = TextEditingController();
     TextEditingController _nameController = TextEditingController();
@@ -142,13 +183,33 @@ class _registerstate extends State<register> {
   @override
   Widget build(BuildContext context) {
     readJson();
+    configLoading();
     void click() {
       Navigator.pushNamed(context, 'login');
     }
 
-    void register() {
-      //here _emailController.text
-        //here _emailController.text
+    void register() async{
+      showLoading();
+      if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty){
+        hideLoading();
+        showError('Please put some Data');
+
+
+      }else if (_passwordController.text.length < 6){
+        hideLoading();
+        showDialog(context: context, builder: (BuildContext context) { return buildDialog(context, 'Password must be at least 6 characters');});
+      }
+      else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailController.text)){
+        showDialog(context: context,
+        builder: (BuildContext context) { return buildDialog(context, 'Email address is badly formatted');}
+        );
+      }else if (_passwordController.text != _passwordconfirmController.text){
+        hideLoading();
+        showDialog(context: context,
+            builder: (BuildContext context) { return buildDialog(context, 'Passwords don\'t match');}
+        );
+      }
+      else if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _nameController.text.isNotEmpty) {
         FirebaseMessaging.instance.getToken().then((Dtoken) async {
           final prefs = await SharedPreferences.getInstance();
           url_helper.Constants constants = new url_helper.Constants();
@@ -164,18 +225,22 @@ class _registerstate extends State<register> {
             "email": _emailController.text,
             "password": _passwordController.text,
             "password_confirmation": _passwordconfirmController.text,
-            "mobile": "0111511111"
+            "mobile": "01124472355"
           };
-          request_help.requestPost(uri, body).then((response){
-            if(response.statusCode == 200){
+          request_help.requestPost(uri, body).then((response) {
+            if (response.statusCode == 200) {
               print("Done");
+              hideLoading();
               //Navigator.pushNamed(context, 'otp');
-            }else{
-              print(response.statusCode);
+            } else {
+              hideLoading();
+              showDialog(context: context,
+                  builder: (BuildContext context) { return buildDialog(context, 'Something Went Wrong');}
+              );
             }
           });
-
         });
+      }
       }
 
 

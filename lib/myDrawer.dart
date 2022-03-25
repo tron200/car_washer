@@ -15,32 +15,62 @@ class myDrawer extends StatefulWidget {
 }
 
 class _myDrawerState extends State<myDrawer> {
+
+
+  void logout(){}
+
+
+
+
+
+
+
+
   List<bool> isSelected = List<bool>.filled(9, false);
   String dropdownvalue = 'En';
+  late String? userjson= "";
+  Future<Map<String, dynamic>> getData() async{
+    final prefs = await SharedPreferences.getInstance();
+    userjson=await prefs.getString("userjson");
+    print(json.decode(userjson!));
+    return json.decode(userjson!);
 
-  Map<String,dynamic> userData ={"":""};
+
+  }
+  Map<String, dynamic> get = {"": ""};
+  String getuser(){
+     getData().then((value){
+       setState(() {
+         get = value;
+       });
+
+
+     });
+    return "";
+  }
 
   // List of items in our dropdown menu
   var items = [
     'En',
     'Ar',
   ];
-  @override
-  Future<void> setupUserData() async {
-    final prefs = await SharedPreferences.getInstance();
-    userData = await ( json.decode(await prefs.getString("user")!));
-    setState(() {});
-  }
+  // @override
+  // Future<void> setupUserData() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   userData = await ( json.decode(await prefs.getString("user")!));
+  //   setState(() {});
+  // }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    setupUserData();
+    WidgetsFlutterBinding.ensureInitialized();
+    getuser();
 
   }
   @override
   Widget build(BuildContext context) {
-    WidgetsFlutterBinding.ensureInitialized();
+
     isSelected[widget.index] = true;
     // TODO: implement build
     return Drawer(
@@ -79,14 +109,14 @@ class _myDrawerState extends State<myDrawer> {
                                     child: Icon(Icons.star, size: 15, color: Colors.yellowAccent,),
                                   ),
                                 ),
-                                TextSpan(text: '5.0'),
+                                TextSpan(text: get["rating"]),
                               ],
 
                             ),
                           ),
                           SizedBox(height: 1.2.h,),
-                          Text("Approved", style: TextStyle(
-                            color: Colors.green.shade500,
+                          Text(get["status"], style: TextStyle(
+                            color: get["status"] == "approved"?Colors.green.shade500:get["status"] == "banned"?Colors.red.shade500:Colors.orange.shade500,
                             fontSize: 15,
 
                             fontWeight: FontWeight.bold
@@ -96,9 +126,9 @@ class _myDrawerState extends State<myDrawer> {
                       )
                     ],
                   ),
-                  Container(
+                   Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("${userData['first_name']}" ,style: TextStyle(
+                    child: Text("${get["first_name"]}" ,style: TextStyle(
                       fontSize: 18,
 
                     ),),
@@ -199,6 +229,15 @@ class _myDrawerState extends State<myDrawer> {
                   dropdownvalue = newValue!;
                 });
               },
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              onPressed: logout,
+              child: Text("log out",),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
             ),
           ),
 

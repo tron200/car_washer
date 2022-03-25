@@ -17,13 +17,30 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Auth/login.dart';
 import 'package:sizer/sizer.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   final prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
+  configLoading();
 }
-
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.light
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
+}
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -33,6 +50,7 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType){
       return MaterialApp(
         title: 'Car Washer',
+        builder: EasyLoading.init(),
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
