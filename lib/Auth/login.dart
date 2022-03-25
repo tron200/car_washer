@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:car_washer/Helper/request_helper.dart';
@@ -33,22 +34,19 @@ class _loginstate extends State<login> {
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String deviceName="";
-    String deviceVersion="";
     String identifier="";
     final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
     try {
       if (Platform.isAndroid) {
         var build = await deviceInfoPlugin.androidInfo;
         deviceName = build.model;
-        deviceVersion = build.version.toString();
         identifier = build.androidId;  //UUID for Android
-        await prefs.setString('deviceVersion', "android");
+        await prefs.setString('deviceType', "android");
       } else if (Platform.isIOS) {
         var data = await deviceInfoPlugin.iosInfo;
         deviceName = data.name;
-        deviceVersion = data.systemVersion;
         identifier = data.identifierForVendor;  //UUID for iOS
-        await prefs.setString('deviceVersion', "ios");
+        await prefs.setString('deviceType', "ios");
       }
     } on PlatformException {
       print('Failed to get platform version');
@@ -89,7 +87,7 @@ class _loginstate extends State<login> {
 
           Uri uri = Uri.parse(constants.FACEBOOK_LOGIN);
           Map<String, dynamic> body = {
-            "device_type": await  prefs.getString("deviceVersion"),
+            "device_type": await  prefs.getString("deviceType"),
             "device_token": Dtoken,
             "accessToken": await prefs.getString("accessToken"),
             "device_id": await prefs.getString("identifier"),
@@ -173,17 +171,19 @@ class _loginstate extends State<login> {
             //GOOGLE_LOGIN
             Uri uri = Uri.parse(constants.GOOGLE_LOGIN);
             Map<String, dynamic> body = {
-              "device_type": await  prefs.getString("deviceVersion"),
+              "device_type": await  prefs.getString("deviceType"),
               "device_token": Dtoken,
               "accessToken": await prefs.getString("accessToken"),
               "device_id": await prefs.getString("identifier"),
               "login_by": "google"
               };
             print(body);
-            request_help.requestPost(uri, body).then((response){
+            request_help.requestPost(uri, body).then((response) async {
               if(response.statusCode == 200){
-                print(response.statusCode);
-                print(response.body);
+                print(json.decode(response.body)["access_token"]);
+                await prefs.setString("accessToken", "${json.decode(response.body)["access_token"]}").then((value){
+                Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+                });
               }else{
                 print(response.statusCode);
                 print(response.body);
@@ -213,14 +213,17 @@ class _loginstate extends State<login> {
           "scope": "",
           "logged_in": "1",
           "password":_passwordController.text,
-          "device_type": await prefs.getString("deviceVersion"),
+          "device_type": await prefs.getString("deviceType"),
           "device_id": await prefs.getString("identifier"),
           "device_token": await prefs.getString("device_token")
         };
         request_help.requestPost(uri, body).then((response) async {
           if(response.statusCode == 200){
             print("Done");
-            Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+            await prefs.setString("accessToken", "${json.decode(response.body)["access_token"]}").then((value){
+              Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
+            });
+
           }else if(response.statusCode == 401){
             //show error email or pasword in correct
             print(response.statusCode);
