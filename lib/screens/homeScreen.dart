@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen>{
   Future<void> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     Uri url = Uri.parse(url_help.USER_PROFILE_API);
-    var token = await prefs.getString("accessToken");
+    var token = await prefs.getString("access_token");
     Map<String, String> header = {
       "X-Requested-With": "XMLHttpRequest",
       "Authorization": "Bearer $token"} ;

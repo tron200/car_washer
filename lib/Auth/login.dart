@@ -71,7 +71,7 @@ class _loginstate extends State<login> {
 
       // Create a credential from the access token
       final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      await prefs.setString("accessToken", loginResult.accessToken!.token);
+      await prefs.setString("access_token", loginResult.accessToken!.token);
       // Once signed in, return the UserCredential
       return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
     }
@@ -89,7 +89,7 @@ class _loginstate extends State<login> {
           Map<String, dynamic> body = {
             "device_type": await  prefs.getString("deviceType"),
             "device_token": Dtoken,
-            "accessToken": await prefs.getString("accessToken"),
+            "access_token": await prefs.getString("accessToken"),
             "device_id": await prefs.getString("identifier"),
             "login_by": "google"
           };
@@ -133,7 +133,7 @@ class _loginstate extends State<login> {
 
           await googleSignInAccount.authentication.then((googleSignInAuthentication) async {
             final prefs = await SharedPreferences.getInstance();
-            await prefs.setString("accessToken", googleSignInAuthentication.accessToken!);
+            await prefs.setString("access_token", googleSignInAuthentication.accessToken!);
             final AuthCredential credential = GoogleAuthProvider.credential(
               accessToken: googleSignInAuthentication.accessToken,
               idToken: googleSignInAuthentication.idToken,
@@ -166,14 +166,14 @@ class _loginstate extends State<login> {
         FirebaseMessaging.instance.getToken().then((Dtoken){
         signInWithGoogle(context: context).then((user) async {
 
-            print("gtoken ${await prefs.getString("accessToken")}");
+            print("gtoken ${await prefs.getString("access_token")}");
             await getDeviceDetails();
             //GOOGLE_LOGIN
             Uri uri = Uri.parse(constants.GOOGLE_LOGIN);
             Map<String, dynamic> body = {
               "device_type": await  prefs.getString("deviceType"),
               "device_token": Dtoken,
-              "accessToken": await prefs.getString("accessToken"),
+              "access_token": await prefs.getString("access_token"),
               "device_id": await prefs.getString("identifier"),
               "login_by": "google"
               };
@@ -181,7 +181,7 @@ class _loginstate extends State<login> {
             request_help.requestPost(uri, body).then((response) async {
               if(response.statusCode == 200){
                 print(json.decode(response.body)["access_token"]);
-                await prefs.setString("accessToken", "${json.decode(response.body)["access_token"]}").then((value){
+                await prefs.setString("access_token", "${json.decode(response.body)["access_token"]}").then((value){
                 Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
                 });
               }else{
@@ -220,7 +220,7 @@ class _loginstate extends State<login> {
         request_help.requestPost(uri, body).then((response) async {
           if(response.statusCode == 200){
             print("Done");
-            await prefs.setString("accessToken", "${json.decode(response.body)["access_token"]}").then((value){
+            await prefs.setString("access_token", "${json.decode(response.body)["access_token"]}").then((value){
               Navigator.pushNamedAndRemoveUntil(context, 'home', (route) => false);
             });
 
@@ -230,6 +230,7 @@ class _loginstate extends State<login> {
           }else{
             //show error : else if internet connection lost or something error
             print(response.statusCode);
+            print(response.body);
 
           }
         });

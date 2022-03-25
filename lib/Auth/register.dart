@@ -46,22 +46,22 @@ class _registerstate extends State<register> {
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String deviceName="";
-    String deviceVersion="";
+    String deviceType="";
     String identifier="";
     final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
     try {
       if (Platform.isAndroid) {
         var build = await deviceInfoPlugin.androidInfo;
         deviceName = build.model;
-        deviceVersion = build.version.toString();
+        deviceType = build.version.toString();
         identifier = build.androidId;  //UUID for Android
-        await prefs.setString('deviceVersion', "android");
+        await prefs.setString('deviceType', "android");
       } else if (Platform.isIOS) {
         var data = await deviceInfoPlugin.iosInfo;
         deviceName = data.name;
-        deviceVersion = data.systemVersion;
+        deviceType = data.systemVersion;
         identifier = data.identifierForVendor;  //UUID for iOS
-        await prefs.setString('deviceVersion', "ios");
+        await prefs.setString('deviceType', "ios");
       }
     } on PlatformException {
       print('Failed to get platform version');
@@ -217,7 +217,7 @@ class _registerstate extends State<register> {
           await getDeviceDetails();
           Uri uri = Uri.parse(constants.register);
           Map<String, dynamic> body = {
-            "device_type": await prefs.getString('deviceVersion'),
+            "device_type": await prefs.getString('deviceType'),
             "device_id": await prefs.getString("identifier"),
             "device_token": Dtoken,
             "login_by": "manual",
