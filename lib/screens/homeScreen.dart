@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>{
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             // SizedBox(height: 2.0.h,),
-                            Icon(Icons.restore,size:50,color: Colors.white,),
+                            Icon(Icons.restore,size:5.0.h,color: Colors.white,),
                             Text("0", style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white
@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>{
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(Icons.bar_chart,size: 50,color: Colors.white,),
+                            Icon(Icons.bar_chart,size: 5.0.h,color: Colors.white,),
                             Text("0", style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white
@@ -148,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen>{
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            Icon(Icons.attach_money_sharp,size: 50,color: Colors.white,),
+                            Icon(Icons.attach_money_sharp,size: 5.0.h,color: Colors.white,),
                             Text("0", style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.white

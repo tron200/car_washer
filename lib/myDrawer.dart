@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:car_washer/Helper/request_helper.dart';
 
 class myDrawer extends StatefulWidget {
   int index;
@@ -18,7 +19,27 @@ class myDrawer extends StatefulWidget {
 class _myDrawerState extends State<myDrawer> {
 
 
-  void logout(){}
+  void logout() async{
+    final prefs = await SharedPreferences.getInstance();
+    request_helper request_help = new request_helper();
+    Uri uri = Uri.parse(constants.LOGOUT);
+    Map<String, dynamic> body = {
+
+      "device_id": await prefs.getString("identifier"),
+      "Authorization": await prefs.getString("access_token"),
+
+    };
+    request_help.requestPost(uri, body).then((value) async {
+      print(value.body);
+      await prefs.setString("userjson", "");
+      print(await prefs.getString("userjson"));
+      Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
+    }).onError((error, stackTrace){
+      print(error.toString());
+    });
+
+
+  }
 
 
 
@@ -54,12 +75,8 @@ class _myDrawerState extends State<myDrawer> {
     'En',
     'Ar',
   ];
-  // @override
-  // Future<void> setupUserData() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   userData = await ( json.decode(await prefs.getString("user")!));
-  //   setState(() {});
-  // }
+
+
   @override
   void initState() {
     // TODO: implement initState
@@ -73,7 +90,7 @@ class _myDrawerState extends State<myDrawer> {
   @override
   Widget build(BuildContext context) {
 
-    String image = "${constants.getPhoto}${get["avatar"]}";
+    String image = get["avatar"] != null?"${constants.getPhoto}${get["avatar"]}": "https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80";
     isSelected[widget.index] = true;
     // TODO: implement build
     return Drawer(
@@ -94,7 +111,9 @@ class _myDrawerState extends State<myDrawer> {
                     children: [
                       GestureDetector(
                         child: CircleAvatar(
-                          backgroundImage: image == null? NetworkImage(""):NetworkImage(image),
+                          backgroundImage: get["avatar"] == null?
+                          NetworkImage("https://images.unsplash.com/photo-1453728013993-6d66e9c9123a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8dmlld3xlbnwwfHwwfHw%3D&w=1000&q=80"):
+                          NetworkImage(image),
                           radius: 6.5.h,
                           backgroundColor: Colors.transparent,
                         ),

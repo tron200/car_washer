@@ -1,13 +1,10 @@
 import 'package:car_washer/Auth/otpVerfication.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 import 'package:car_washer/screens/earningScreen.dart';
-import 'package:car_washer/screens/editProfileScreen.dart';
-import 'package:car_washer/screens/editScreen.dart';
 import 'package:car_washer/screens/helpScreen.dart';
 import 'package:car_washer/screens/historyScreen.dart';
 import 'package:car_washer/screens/homeScreen.dart';
 import 'package:car_washer/screens/notificationScreen.dart';
-import 'package:car_washer/screens/profileScreen.dart';
 import 'package:car_washer/screens/reviewScreen.dart';
 import 'package:car_washer/screens/summaryScreen.dart';
 import 'package:car_washer/screens/withdrawScreen.dart';
@@ -18,6 +15,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Auth/login.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'wrapper.dart';
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: login(),
+        home: Wrapper(),
 
         routes: {
           'login' : (context) => login(),
