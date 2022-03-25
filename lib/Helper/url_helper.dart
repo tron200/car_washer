@@ -40,4 +40,5 @@ class Constants{
   var COMPLETE_DOCUMENT =  "https://lamaah.ae/api/provider/document/checkDocument?term_n=1";
 
   var ChatGetMessage =  "https://lamaah.ae/api/provider/firebase/getChat?request_id=";
+  var getPhoto = "https://lamaah.ae/storage/app/public/";
 }

@@ -61,8 +61,6 @@ class MyApp extends StatelessWidget {
           'register': (context) => register(),
           'home': (context) => HomeScreen(),
           'document': (context) => DocumentScreen(),
-          'profile': (context) => ProfileScreen(),
-          'editprofile': (context) => EditProfileScreen(),
           'summary': (context) => SummaryScreen(),
           'earning': (context) => EarningScreen(),
           'withdraw': (context) => WithdrawScreen(),

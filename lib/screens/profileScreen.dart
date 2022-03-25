@@ -1,9 +1,15 @@
+import 'package:car_washer/screens/editProfileScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import './editScreen.dart';
 
 class ProfileScreen extends StatelessWidget{
+  String name;
+  String image;
+  String email;
+  String number;
+  ProfileScreen({required this.name, required this.image,required this.email,required this.number, });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +36,19 @@ class ProfileScreen extends StatelessWidget{
               children: [
                 Column(
                   children: [
-                    Icon(Icons.account_circle_rounded,size: 100,),
-                    Text("Jason Bor3y",style: TextStyle(
+                    CircleAvatar(
+                      backgroundImage: NetworkImage(image),
+                      radius: 9.0.h,
+                      backgroundColor: Colors.transparent,
+                    ),
+                    Text(name,style: TextStyle(
                       fontSize: 18,
 
                     ),),
                     SizedBox(height: 1.2.h,),
                     TextButton(
                         onPressed: (){
-                          Navigator.pushNamed(context, 'editprofile');
+                          Navigator.push(context, MaterialPageRoute( builder: (context) => EditProfileScreen(name: name, image: image,email: email, number: number)));
                         },
                         child: RichText(
 

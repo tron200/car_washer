@@ -1,5 +1,6 @@
 import 'dart:convert';
-
+import '../Helper/url_helper.dart' as url_helper;
+import 'package:car_washer/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +19,6 @@ class _myDrawerState extends State<myDrawer> {
 
 
   void logout(){}
-
 
 
 
@@ -68,9 +68,12 @@ class _myDrawerState extends State<myDrawer> {
     getuser();
 
   }
+  url_helper.Constants constants = new url_helper.Constants();
+
   @override
   Widget build(BuildContext context) {
 
+    String image = "${constants.getPhoto}${get["avatar"]}";
     isSelected[widget.index] = true;
     // TODO: implement build
     return Drawer(
@@ -89,9 +92,25 @@ class _myDrawerState extends State<myDrawer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      IconButton(onPressed: (){
-                        Navigator.pushNamed(context, 'profile');
-                      }, icon: Icon(Icons.account_circle_rounded,),iconSize: 100,),
+                      GestureDetector(
+                        child: CircleAvatar(
+                          backgroundImage: image == null? NetworkImage(""):NetworkImage(image),
+                          radius: 6.5.h,
+                          backgroundColor: Colors.transparent,
+                        ),
+                        onTap:() {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (context) =>
+                                  ProfileScreen(name: get["first_name"],
+                                    image: image,
+                                    email: get["email"],
+                                    number: get["mobile"],)));
+                        }
+                      ),
+
+                      // IconButton(onPressed: (){
+                      //   Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen(name: get["first_name"], image: image,email: get["email"], number: get["mobile"],)));
+                      // }, icon: Icon(Icons.account_circle_rounded,),iconSize: 100,),
 
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,8 +134,10 @@ class _myDrawerState extends State<myDrawer> {
                             ),
                           ),
                           SizedBox(height: 1.2.h,),
-                          Text(get["status"], style: TextStyle(
-                            color: get["status"] == "approved"?Colors.green.shade500:get["status"] == "banned"?Colors.red.shade500:Colors.orange.shade500,
+                          Text(get["status"] == null? "": "${get["status"]}", style: TextStyle(
+                            color: get["status"] == "approved"?Colors.green.shade500:
+                                   get["status"] == "banned"?Colors.red.shade500:
+                                   Colors.orange.shade500,
                             fontSize: 15,
 
                             fontWeight: FontWeight.bold

@@ -5,6 +5,11 @@ import 'package:sizer/sizer.dart';
 import 'editScreen.dart';
 
 class EditProfileScreen extends StatelessWidget{
+  String name;
+  String image;
+  String email;
+  String number;
+  EditProfileScreen({required this.name, required this.image,required this.email,required this.number, });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,11 @@ class EditProfileScreen extends StatelessWidget{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(Icons.account_circle_rounded,size: 100,color: Colors.grey,),
+            CircleAvatar(
+              backgroundImage: NetworkImage(image),
+              radius: 9.0.h,
+              backgroundColor: Colors.transparent,
+            ),
             Text("Name",style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -36,7 +45,7 @@ class EditProfileScreen extends StatelessWidget{
             ),),
             SizedBox(height: 2.2.h,),
             TextButton(
-             child: Text("Jason Bor3y",style: TextStyle(
+             child: Text(name,style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               )),
@@ -53,7 +62,7 @@ class EditProfileScreen extends StatelessWidget{
             ),),
             SizedBox(height: 2.2.h,),
             TextButton(
-                child: Text("Jason@gmail.com",style: TextStyle(
+                child: Text(email,style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               ),),
@@ -70,7 +79,7 @@ class EditProfileScreen extends StatelessWidget{
             ),),
             SizedBox(height: 2.2.h,),
 
-            TextButton(child: Text("1124472355",style: TextStyle(
+            TextButton(child: Text(number,style: TextStyle(
                 color: Colors.white,
                 fontSize: 18,
               ),),

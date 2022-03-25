@@ -229,7 +229,7 @@ class _loginstate extends State<login> {
             print(response.statusCode);
           }else{
             //show error : else if internet connection lost or something error
-            print(response.statusCode);
+            print(response.body);
             print(response.body);
 
           }
@@ -273,7 +273,7 @@ class _loginstate extends State<login> {
 
                         children: [
 
-                          SizedBox(height: 35.0.h,),
+                          SizedBox(height: 20.0.h,),
                           Container(
                             width: MediaQuery
                                 .of(context)
