@@ -2,7 +2,6 @@ class Constants{
   String APP_URL = "";
   String client_id = "2";
   var client_secret = "WifS1rMi3LvuorP1G2UdtKZairUNSH2iMqrKivPf";
-
   var STRIPE_TOKEN = "pk_test_LTXZTPA9yepu9dEodKsJm6GA";
   var GET_USERREVIEW =  "https://lamaah.ae/api/provider/review";
   var GET_NOTIFICATIONS =  "https://lamaah.ae/api/provider/notification";
@@ -22,7 +21,6 @@ class Constants{
   var ADD_COUPON_API =  "https://lamaah.ae/api/user/promocode/add";
   var COUPON_LIST_API =  "https://lamaah.ae/api/user/promocodes";
   var GET_WITHDRAW_LIST =  "https://lamaah.ae/api/provider/withdrawaList";
-
   var GET_CARD_LIST_DETAILS =  "https://lamaah.ae/api/provider/BankList";
   var GET_ADD_BANK_DETAILS =  "https://lamaah.ae/api/provider/addBank?account_name=";
   var WITHDRAW_REQUEST =  "https://lamaah.ae/api/provider/withdrawalRequest?provider_id=";
@@ -35,10 +33,8 @@ class Constants{
   var GET_HISTORY_API =  "https://lamaah.ae/api/provider/requests/history";
   var GET_HISTORY_DETAILS_API =  "https://lamaah.ae/api/provider/requests/history/details";
   var CHANGE_PASSWORD_API =  "https://lamaah.ae/api/provider/profile/password";
-
   var CHECK_DOCUMENT =  "https://lamaah.ae/api/provider/document/checkDocument";
   var COMPLETE_DOCUMENT =  "https://lamaah.ae/api/provider/document/checkDocument?term_n=1";
-
   var ChatGetMessage =  "https://lamaah.ae/api/provider/firebase/getChat?request_id=";
   var getPhoto = "https://lamaah.ae/storage/app/public/";
 }
