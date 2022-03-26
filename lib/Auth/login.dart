@@ -289,7 +289,7 @@ class _loginstate extends State<login> {
             "grant_type": "password",
             "client_id": constants.client_id,
             "client_secret": constants.client_secret,
-            "email": _emailController.text,
+            "email": _emailController.text.toString().trim(),
             "scope": "",
             "logged_in": "1",
             "password": _passwordController.text,
