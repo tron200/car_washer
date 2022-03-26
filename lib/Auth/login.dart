@@ -306,7 +306,7 @@ class _loginstate extends State<login> {
                   "${json.decode(response.body)["access_token"]}").then((
                   value) {
                 Navigator.pushNamedAndRemoveUntil(
-                    context, 'home', (route) => false);
+                    context, 'addaccount', (route) => false);
               });
             } else if (response.statusCode == 401) {
               //show error email or pasword in correct
