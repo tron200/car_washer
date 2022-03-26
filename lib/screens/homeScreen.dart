@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../Helper/url_helper.dart' as url_helper;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 
 class HomeScreen extends StatefulWidget{
   @override
@@ -16,7 +18,13 @@ class _HomeScreenState extends State<HomeScreen>{
   bool value_switch = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List userData =[];
+  late GoogleMapController mapController;
 
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
   request_helper requestHelp = new request_helper();
   url_helper.Constants url_help = new url_helper.Constants();
   Future<void> getProfileData() async {
@@ -55,13 +63,18 @@ class _HomeScreenState extends State<HomeScreen>{
         body: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          child:
-
-          Stack(
+          child: Stack(
             children: <Widget>[
               Container(
                 height: MediaQuery.of(context).size.height,
-                child: Image.network("https://m.media-amazon.com/images/I/91cM19R8NeL._AC_SL1500_.jpg",fit: BoxFit.fill),
+                child: GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: _center,
+                    zoom: 11.0,
+                  ),
+                ),
+
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

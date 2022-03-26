@@ -25,10 +25,10 @@ class HistoryScreen extends StatelessWidget{
             bottom: TabBar(
               tabs: [
                 Tab(
-                  child: Text('PAST RIDES'),
+                  child: Text('PAST WASHES'),
                 ),
                 Tab(
-                  child: Text('UPCOMING RIDES'),
+                  child: Text('UPCOMING WASHES'),
                 ),
               ],
             ),
