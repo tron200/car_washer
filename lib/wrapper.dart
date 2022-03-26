@@ -21,7 +21,7 @@ class _WrapperState extends State<Wrapper>{
   Future<String> getData() async{
     final prefs = await SharedPreferences.getInstance();
     userjson=await prefs.getString("userjson");
-    print(json.decode(userjson!));
+    // print(json.decode(userjson!));
     return userjson!;
 
 
@@ -43,7 +43,6 @@ class _WrapperState extends State<Wrapper>{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    print("lol ${user}");
     return user == "" ? login(): HomeScreen();
   }
 }
