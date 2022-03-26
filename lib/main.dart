@@ -16,6 +16,7 @@ import 'Auth/login.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import 'screens/addAcountScreen.dart';
 import 'wrapper.dart';
 
 main() async {
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Wrapper(),
+        home: AddAccountScreen(),
 
         routes: {
           'login' : (context) => login(),
@@ -68,6 +69,7 @@ class MyApp extends StatelessWidget {
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
           'otp': (context) => otpVerfication(),
+          'addaccount': (context) => AddAccountScreen(),
         },
 
       );
