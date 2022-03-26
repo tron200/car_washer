@@ -28,6 +28,28 @@ class _AddAccountScreenState extends State<AddAccountScreen>{
 
   }
 
+  Widget InputTaker(TextEditingController controller, String hintTitle){
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(color: Color(0xffEAEEF6), borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            hintText: hintTitle,
+            hintStyle: TextStyle(fontSize: 18, color: Color(0xffB1B2BB), fontStyle: FontStyle.italic),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+            border: InputBorder.none,
+
+
+          ),
+          keyboardType: TextInputType.name,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,96 +59,83 @@ class _AddAccountScreenState extends State<AddAccountScreen>{
         title: const Text("Add Account"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
+          icon: Icon(Icons.arrow_back, color: Colors.black,),
           onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
+            Navigator.pop(context);
           },
         ),
       ),
-      drawer: myDrawer(index: 5,),
-      body: Column(
-        children: [
-          TextField(
-            controller: _BankNameController,
-            decoration: InputDecoration(
-              hintText: "Bank Name"
-            ),
-          ),
-          TextField(
-            controller: _AccountNumberController,
-            decoration: InputDecoration(
-                hintText: "Account Number"
-            ),
-          ),
-          TextField(
-            controller: _AccountHolderController,
-            decoration: InputDecoration(
-                hintText: "Account Holder Name"
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              showCountryPicker(
-                context: context,
-                //Optional.  Can be used to exclude(remove) one ore more country from the countries list (optional).
-                exclude: <String>['KN', 'MF'],
-                //Optional. Shows phone code before the country name.
-                showPhoneCode: true,
-                showWorldWide: false,
-                onSelect: (Country country) {
-                  print('Select country: ${country.name}');
-                  setState(() {
-                    _countryName = country.name;
-                  });
-                },
-                // Optional. Sets the theme for the country list picker.
-                countryListTheme: CountryListThemeData(
-                  // Optional. Sets the border radius for the bottomsheet.
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.0),
-                    topRight: Radius.circular(40.0),
-                  ),
-                  // Optional. Styles the search field.
-                  inputDecoration: InputDecoration(
-                    labelText: 'Search',
-                    hintText: 'Start typing to search',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: const Color(0xFF8C98A8).withOpacity(0.2),
+      body: Container(
+        padding: EdgeInsets.all(12),
+        child: Column(
+          children: [
+            InputTaker(_BankNameController, "Bank Name"),
+            InputTaker(_AccountNumberController, "Account Number"),
+            InputTaker(_AccountHolderController, "Account Holder Name"),
+            ElevatedButton(
+              onPressed: () {
+                showCountryPicker(
+                  context: context,
+                  //Optional.  Can be used to exclude(remove) one ore more country from the countries list (optional).
+                  exclude: <String>['KN', 'MF'],
+                  //Optional. Shows phone code before the country name.
+                  showPhoneCode: true,
+                  showWorldWide: false,
+                  onSelect: (Country country) {
+                    print('Select country: ${country.name}');
+                    setState(() {
+                      _countryName = country.name;
+                    });
+                  },
+                  // Optional. Sets the theme for the country list picker.
+                  countryListTheme: CountryListThemeData(
+                    // Optional. Sets the border radius for the bottomsheet.
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40.0),
+                      topRight: Radius.circular(40.0),
+                    ),
+                    // Optional. Styles the search field.
+                    inputDecoration: InputDecoration(
+                      labelText: 'Search',
+                      hintText: 'Start typing to search',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: const Color(0xFF8C98A8).withOpacity(0.2),
+                        ),
                       ),
                     ),
+
+
                   ),
+                );
+              },
+              child: const Text('Select Country'),
+            ),
+            ElevatedButton(onPressed: (){
+              showMaterialScrollPicker<String>(
+                  context: context,
+                  title: 'Pick Your State',
+                  items: list,
+                  selectedItem: list[0],
+                  onChanged: (value){
+                    print(value);
+                    setState(() {
+                      _Currency = value;
 
-
-                ),
+                    });
+                  }
               );
-            },
-            child: const Text('Select Country'),
-          ),
-          ElevatedButton(onPressed: (){
-            showMaterialScrollPicker<String>(
-              context: context,
-              title: 'Pick Your State',
-              items: list,
-              selectedItem: list[0],
-              onChanged: (value){
-                print(value);
-                setState(() {
-                  _Currency = value;
-
-                });
-              }
-            );
-          }, child: Text("Select Currency")),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(onPressed: addAccount, child: Text("Add Account")),
-              ElevatedButton(onPressed: cancel, child: Text("Cancel"))
-            ],
-          )
-        ],
+            }, child: Text("Select Currency")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(onPressed: addAccount, child: Text("Add Account")),
+                ElevatedButton(onPressed: cancel, child: Text("Cancel"))
+              ],
+            )
+          ],
+        ),
       )
     );
   }
