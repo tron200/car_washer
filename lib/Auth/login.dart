@@ -113,7 +113,7 @@ class _loginstate extends State<login> {
             hintStyle: TextStyle(fontSize: 18, color: Color(0xffB1B2BB), fontStyle: FontStyle.italic),
             contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
             border: InputBorder.none,
-            prefixIcon: hintTitle == "Email"?Icon(Icons.email): Icon(Icons.lock),
+            prefixIcon: hintTitle == "Email"?Icon(Icons.email,color: Colors.indigo.shade800,): Icon(Icons.lock, color: Colors.indigo.shade800,),
 
           ),
           keyboardType: keyboardType,
@@ -328,6 +328,7 @@ class _loginstate extends State<login> {
 
 
     return Scaffold(
+      resizeToAvoidBottomInset :false,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -341,72 +342,78 @@ class _loginstate extends State<login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 15),
-                height: 65.0.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      SizedBox(height: 45),
-                      userInput(_emailController, 'Email', TextInputType.emailAddress),
-                      userInput(_passwordController, 'Password', TextInputType.visiblePassword),
-                      Container(
-                        height: 55,
-                        // for an exact replicate, remove the padding.
-                        // pour une réplique exact, enlever le padding.
-                        padding: const EdgeInsets.only(top: 5, left: 70, right: 70),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-                            primary: Colors.indigo.shade800,
-                          ),
-                          onPressed: signin,
-                          child: Text('Sign in', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,),),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Center(child: Text('Forgot password ?'),),
-                      SizedBox(height: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            signInWith(Icons.facebook,facebookLogin),
-                            signInWith(MyFlutterApp.google_plus_circle, googleLogin),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 0.9.h,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('Don\'t have an account yet ? ', style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),),
-                          TextButton(
-                            onPressed: click,
-                            child: Text(
-                              'Sign Up',
-                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-                            ),
-                          ),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  height: 600,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              SizedBox(height: 45),
+                              userInput(_emailController, 'Email', TextInputType.emailAddress),
+                              userInput(_passwordController, 'Password', TextInputType.visiblePassword),
+                              Container(
+                                height: 55,
+                                // for an exact replicate, remove the padding.
+                                // pour une réplique exact, enlever le padding.
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+                                    primary: Colors.indigo.shade800,
+                                  ),
+                                  onPressed: signin,
+                                  child: Text('Sign in', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,),),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Center(child: Text('Forgot password ?'),),
+                              SizedBox(height: 20),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 25.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    signInWith(Icons.facebook,facebookLogin),
+                                    signInWith(MyFlutterApp.google_plus_circle, googleLogin),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 0.9.h,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Don\'t have an account yet ? ', style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),),
+                                  TextButton(
+                                    onPressed: click,
+                                    child: Text(
+                                      'Sign Up',
+                                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+                                    ),
+                                  ),
 
-                        ],
-                      ),
+                                ],
+                              ),
 
-                    ],
+                            ],
+                          ),
+                        )
+                        )
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            )
+
+
           ],
         ),
       ),
