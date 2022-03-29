@@ -17,6 +17,7 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'screens/addAcountScreen.dart';
+import 'screens/processingScreen.dart';
 import 'wrapper.dart';
 
 main() async {
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
           'otp': (context) => otpVerfication(),
+          'processing': (context) => ProcessingScreen(),
           'addaccount': (context) => AddAccountScreen(),
         },
 

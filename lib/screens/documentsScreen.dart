@@ -1,3 +1,6 @@
+// Updates :
+// take thumbnail word and png, reset date when click at upload
+
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -135,7 +138,7 @@ class _DocumentScreenState extends State<DocumentScreen>{
         ),
 
       ),
-      drawer: myDrawer(index: 3,),
+      drawer: myDrawer(index: 4,),
       body: Stack(
         children: [
           Container(

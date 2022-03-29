@@ -9,7 +9,7 @@ class WithdrawScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: myDrawer(index: 6,),
+      drawer: myDrawer(index: 7,),
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
         title: Text("Earned Money"),

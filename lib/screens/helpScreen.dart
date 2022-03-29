@@ -19,7 +19,7 @@ class HelpScreen extends StatelessWidget{
           },
         ),
       ),
-      drawer: myDrawer(index: 7,),
+      drawer: myDrawer(index: 8,),
       body: Text("Hi"),
     );
   }

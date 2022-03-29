@@ -19,7 +19,7 @@ class NotificationScreen extends StatelessWidget{
           },
         ),
       ),
-      drawer: myDrawer(index: 5,),
+      drawer: myDrawer(index: 6,),
       body: Text("Hi"),
     );
   }

@@ -69,107 +69,99 @@ class _PastRidesTapState extends State<PastRidesTap>{
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
-        return  FlipCard(
+        return  Container(
+          height: MediaQuery.of(context).size.height / 6,
+          child: FlipCard(
 
-                direction: FlipDirection.HORIZONTAL,
-                speed: 1000,
-                onFlip: (){
-                  setState(() {});
-                },
-                front: Card(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                elevation: 10,
+                  direction: FlipDirection.HORIZONTAL,
+                  speed: 1000,
+                  onFlip: (){
+                    setState(() {});
+                  },
+                  front: Card(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  elevation: 10,
 
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                ),
-                color: Colors.greenAccent,
-                child:Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Booking Id: ${list[index]["id"]}", style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15,
-                          ),),
-                          Rating(value: double.parse(list[index]["rating"]))
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(Icons.account_circle_rounded, size: 60,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Mohammed"),
-                              Text("Total: 12 AED", style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15
-                              ),)
-                            ],
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text("Date: ${list[index]["date"]}", style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),)
-                        ],
-                      )
-                    ],
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                   ),
-                ),
-                ),
-                back: Card(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                elevation: 10,
-
-                shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                ),
-                color: Colors.greenAccent,
-                child:
-                Padding(
-                  padding: EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      ReadMoreText(
-                          "Comments: ${list[index]["comment"]}",
-                        key: UniqueKey(),
-                        trimLines: _line,
-                        colorClickableText: Colors.blue.shade800,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Show more',
-                        trimExpandedText: 'Show less',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.black),
-                      ),
-
-                      Text("Payment Type: ${list[index]["payment_type"]}", style: TextStyle(
-                        fontSize: 15,
-                      ),),
-                      Text("Tax: ${list[index]["tax"]} AED", style: TextStyle(
-                        fontSize: 15,
-                      ),),
-                      Text("Commision: ${list[index]["commission"]} AED", style: TextStyle(
-                        fontSize: 15,
-                      ),),
-                      Text("Total: ${list[index]["total"]} AED", style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),)
-
-                    ],
+                  color: Colors.greenAccent,
+                  child:Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Booking Id: ${list[index]["id"]}", style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
+                            ),),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Icon(Icons.account_circle_rounded, size: 60,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Mohammed"),
+                                Text("Total: 12 AED", style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15
+                                ),)
+                              ],
+                            )
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Date: ${list[index]["date"]}", style: TextStyle(
+                                fontWeight: FontWeight.bold
+                            ),)
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),),
-              );
+                  ),
+                  back: Card(
+                  margin: EdgeInsets.symmetric(vertical: 10),
+                  elevation: 10,
+
+                  shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  ),
+                  color: Colors.greenAccent,
+                  child:
+                  Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+
+
+                        Text("Payment Type: ${list[index]["payment_type"]}", style: TextStyle(
+                          fontSize: 15,
+                        ),),
+                        Text("Tax: ${list[index]["tax"]} AED", style: TextStyle(
+                          fontSize: 15,
+                        ),),
+                        Text("Commision: ${list[index]["commission"]} AED", style: TextStyle(
+                          fontSize: 15,
+                        ),),
+                        Text("Total: ${list[index]["total"]} AED", style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),)
+
+                      ],
+                    ),
+                  ),),
+                ),
+        );
 
 
       },

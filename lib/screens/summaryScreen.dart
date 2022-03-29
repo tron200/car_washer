@@ -22,7 +22,7 @@ class SummaryScreen extends StatelessWidget{
         centerTitle: true,
         backgroundColor: Colors.blue.shade800,
       ),
-      drawer: myDrawer(index: 4,),
+      drawer: myDrawer(index: 5,),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
