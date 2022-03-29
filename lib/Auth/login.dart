@@ -34,7 +34,9 @@ class _loginstate extends State<login> {
   TextEditingController _passwordController = TextEditingController();
   request_helper request_help = new request_helper();
   url_helper.Constants constants = new url_helper.Constants();
-
+  void forgetpassword() {
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+  }
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String deviceName="";
@@ -393,7 +395,7 @@ class _loginstate extends State<login> {
                                 ),
                               ),
                               SizedBox(height: 20),
-                              Center(child: Text('Forgot password ?'),),
+                              Center(child: TextButton(child: Text('Forgot password ?'), onPressed: forgetpassword,),),
                               SizedBox(height: 20),
                               Padding(
                                 padding: const EdgeInsets.only(top: 25.0),
@@ -437,4 +439,6 @@ class _loginstate extends State<login> {
     );
 
   }
+
+
 }
