@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
 
@@ -123,6 +124,11 @@ class _loginstate extends State<login> {
 
   }
 
+  double _height = 0;
+
+
+
+
   @override
   Widget build(BuildContext context) {
     void click() {
@@ -130,6 +136,16 @@ class _loginstate extends State<login> {
 
     }
 
+    Future.delayed(const Duration(milliseconds: 500), () {
+
+// Here you can write your code
+
+      setState(() {
+        // Here you can write your code for open new view
+        _height = 600;
+      });
+
+    });
 
     Future<UserCredential> signInWithFacebook() async {
       final prefs = await SharedPreferences.getInstance();
@@ -326,7 +342,6 @@ class _loginstate extends State<login> {
 
 
 
-
     return Scaffold(
       resizeToAvoidBottomInset :false,
       body: Container(
@@ -342,9 +357,11 @@ class _loginstate extends State<login> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-              Container(
+            AnimatedContainer(
+                  duration: Duration(seconds: 2),
+                  curve: Curves.fastOutSlowIn,
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  height: 600,
+                  height: _height,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15)),

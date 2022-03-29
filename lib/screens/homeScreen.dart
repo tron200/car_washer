@@ -15,18 +15,24 @@ class HomeScreen extends StatefulWidget{
 
 class _HomeScreenState extends State<HomeScreen>{
   String title = "Offline";
+  static double lat = 28.47212100;
+  static double lon = 77.07251060;
   bool value_switch = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List userData =[];
+
   late GoogleMapController mapController;
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
+   final LatLng _center =  LatLng(lat, lon);
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
+
+
   request_helper requestHelp = new request_helper();
   url_helper.Constants url_help = new url_helper.Constants();
+
   Future<void> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     Uri url = Uri.parse(url_help.USER_PROFILE_API);
@@ -73,11 +79,15 @@ class _HomeScreenState extends State<HomeScreen>{
                     target: _center,
                     zoom: 11.0,
                   ),
+                  myLocationEnabled: true,
+                  myLocationButtonEnabled: true,
+
+
                 ),
 
               ),
               Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -119,62 +129,69 @@ class _HomeScreenState extends State<HomeScreen>{
                     ],
                   ),
 
-                  Container(
-                    margin: EdgeInsets.all(12),
-                    color: blue800,
-                    height: 15.0.h,
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Column(
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                        margin: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: blue800
+                        ),
+                        height: 15.0.h,
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            // SizedBox(height: 2.0.h,),
-                            Icon(Icons.restore,size:5.0.h,color: Colors.white,),
-                            Text("0", style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white
-                            ),),
-                            Text("Washes", style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white
-                            ),),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                // SizedBox(height: 2.0.h,),
+                                Icon(Icons.restore,size:5.0.h,color: Colors.white,),
+                                Text("0", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white
+                                ),),
+                                Text("Washes", style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white
+                                ),),
 
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.bar_chart,size: 5.0.h,color: Colors.white,),
+                                Text("0", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white
+                                ),),
+                                Text("Earnings", style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white
+                                ),),
+
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(Icons.attach_money_sharp,size: 5.0.h,color: Colors.white,),
+                                Text("0", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white
+                                ),),
+                                Text("Commision", style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.white
+                                ),),
+
+                              ],
+                            )
                           ],
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(Icons.bar_chart,size: 5.0.h,color: Colors.white,),
-                            Text("0", style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white
-                            ),),
-                            Text("Earnings", style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white
-                            ),),
-
-                          ],
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(Icons.attach_money_sharp,size: 5.0.h,color: Colors.white,),
-                            Text("0", style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white
-                            ),),
-                            Text("Commision", style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.white
-                            ),),
-
-                          ],
-                        )
-                      ],
-                    ),
+                      ),
+                    )
                   )
                 ],
               )

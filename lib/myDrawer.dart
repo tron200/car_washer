@@ -63,6 +63,7 @@ class _myDrawerState extends State<myDrawer> {
      getData().then((value){
        setState(() {
          get = value;
+         print(get["access_token"]);
        });
 
 

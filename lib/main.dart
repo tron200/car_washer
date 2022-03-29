@@ -22,20 +22,21 @@ import 'wrapper.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final prefs = await SharedPreferences.getInstance();
   runApp(const MyApp());
   configLoading();
 }
 void configLoading() {
   EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 1000)
+    ..displayDuration = const Duration(milliseconds: 1500)
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.light
+    ..loadingStyle = EasyLoadingStyle.custom
     ..indicatorSize = 45.0
     ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..animationDuration = const Duration(milliseconds: 500)
+    // ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.black
+    ..indicatorColor = Colors.blue
     ..textColor = Colors.yellow
     ..maskColor = Colors.blue.withOpacity(0.5)
     ..userInteractions = true
