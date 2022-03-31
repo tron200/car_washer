@@ -7,6 +7,8 @@ import 'package:sizer/sizer.dart';
 
 
 class otpVerfication extends StatefulWidget{
+  Map<String, dynamic> body;
+  otpVerfication({required this.body});
   @override
   _otpVerficationState createState() => _otpVerficationState();
 }

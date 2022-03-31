@@ -59,6 +59,8 @@ dependencies:
   open_file: ^3.2.1
   thumbnailer: ^2.0.1
   flutter_datetime_picker: ^1.5.1
+  badges: ^2.0.2
+  location: ^4.3.0
 
 
 

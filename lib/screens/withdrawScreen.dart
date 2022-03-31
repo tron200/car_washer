@@ -1,3 +1,4 @@
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +10,12 @@ class WithdrawScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: myDrawer(index: 7,),
+      drawer: myDrawer(index: 8,),
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
         title: Text("Earned Money"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
-          onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        leading: BadgeIcon(scaffoldKey: _scaffoldKey,),
       ),
       body: Container(
         padding: EdgeInsets.all(12),

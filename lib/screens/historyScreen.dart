@@ -1,3 +1,4 @@
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +22,7 @@ class HistoryScreen extends StatelessWidget{
             backgroundColor: Colors.blue.shade800,
             title: Text("Washes History"),
             centerTitle: true,
-            leading: IconButton(
-              icon: Icon(Icons.menu, color: Colors.white,),
-              onPressed: (){
-                _scaffoldKey.currentState?.openDrawer();
-              },
-            ),
+            leading: BadgeIcon(scaffoldKey: _scaffoldKey,),
             bottom: TabBar(
               tabs: [
                 Tab(
@@ -90,6 +86,7 @@ class _PastRidesTapState extends State<PastRidesTap>{
                     padding: EdgeInsets.all(12),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -115,13 +112,10 @@ class _PastRidesTapState extends State<PastRidesTap>{
                             )
                           ],
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Date: ${list[index]["date"]}", style: TextStyle(
-                                fontWeight: FontWeight.bold
-                            ),)
-                          ],
+                        Expanded(
+                          child: Text("Date: ${list[index]["date"]}", style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),)
                         )
                       ],
                     ),

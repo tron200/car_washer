@@ -38,4 +38,8 @@ class Constants{
   var ChatGetMessage =  "https://lamaah.ae/api/provider/firebase/getChat?request_id=";
   var getPhoto = "https://lamaah.ae/storage/app/public/";
   var getAllReguests = "https://lamaah.ae/api/provider/requests/";
+  var getAllServices = "https://lamaah.ae/api/provider/services";
+  var setStatus = "https://lamaah.ae/api/provider/requests/changeProviderStatus";
+  var getProvidersLocations = "https://lamaah.ae/api/provider/requests/ProvidersLocations/";
+  var setProviderLocation = "https://lamaah.ae/api/provider/requests/setProviderLocation";
 }

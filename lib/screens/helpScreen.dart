@@ -1,3 +1,4 @@
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,14 +13,9 @@ class HelpScreen extends StatelessWidget{
         backgroundColor: Colors.blue.shade800,
         title: Text("Help"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
-          onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        leading: BadgeIcon(scaffoldKey: _scaffoldKey,)
       ),
-      drawer: myDrawer(index: 8,),
+      drawer: myDrawer(index: 9,),
       body: Text("Hi"),
     );
   }

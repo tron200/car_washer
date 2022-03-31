@@ -1,3 +1,4 @@
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +16,7 @@ class EarningScreen extends StatelessWidget{
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
         title: Text("My Earning"),
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
-          onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        leading: BadgeIcon(scaffoldKey: _scaffoldKey,),
         centerTitle: true,
       ),
 

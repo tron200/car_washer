@@ -13,13 +13,13 @@ class NotificationScreen extends StatelessWidget{
         title: Text("Notiffication"),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
+          icon: Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
+            Navigator.pop(context);
           },
         ),
       ),
-      drawer: myDrawer(index: 6,),
+      drawer: myDrawer(index: 7,),
       body: Text("Hi"),
     );
   }

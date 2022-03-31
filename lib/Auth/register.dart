@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
+import 'package:car_washer/service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:device_info/device_info.dart';
@@ -21,27 +22,15 @@ class register extends StatefulWidget{
   _registerstate createState() => _registerstate();
 
 }
-void configLoading() {
-  EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.light
-    ..indicatorSize = 45.0
-    ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true
-    ..dismissOnTap = false;
-}
 
 
 class _registerstate extends State<register> {
-  List _services = [];
-  List<bool> values = List<bool>.filled(2, false);
+  // List _services = [];
+  List<bool> values = [];
   bool va = false;
+  request_helper requestHelp = new request_helper();
+
+  url_helper.Constants url_help = new url_helper.Constants();
 
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
@@ -73,82 +62,17 @@ class _registerstate extends State<register> {
   }
 
 
-  Widget getTableWidgets(List<dynamic> strings , StateSetter setState) {
-    List<TableRow> list = <TableRow>[];
-    list.add(TableRow(
-        children: [
-          TableCell(
-
-            child: Text("Available", style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.bold
-            ),),
-          ),
-          TableCell(
-
-            child: Text("Service Name", style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.bold
-            )),
-          ),
-          TableCell(
-             child: Text("Service Price (AED)", style: TextStyle(
-                 fontSize: 12,
-                 fontWeight: FontWeight.bold
-             )),)
-
-        ]
-    ));
-    for (var i = 0; i < strings.length; i++) {
-      list.add(new TableRow(children: [
-        TableCell(
-          child: Checkbox(
-              value: values[i],
-              onChanged: (bool? value) {
-                setState(() => values[i] = value!
-                );
-
-          }),),
-        TableCell(child: Padding(
-          padding: EdgeInsets.all(12),
-          child: Text(strings[i]["name"],  style: TextStyle(
-              fontSize: 14,
-          )),
-        )),
-        TableCell(child: TextField(
-
-          decoration: InputDecoration(
-            hintText: "Service Price (AED)",
-            contentPadding: EdgeInsets.all(2)
-          ),
-        )
-
-        )
-      ]
-        ,)
-      );
-    }
-    return new Table(
-      border: TableBorder.all(),
-      columnWidths: const <int, TableColumnWidth>{
-        0: FlexColumnWidth(),
-        1: FixedColumnWidth(85),
-        2: FixedColumnWidth(80),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: list,);
-  }
 
 
 
 
-  Future<void> readJson() async {
-    final String response = await rootBundle.loadString('assets/services.json');
-    final data = await json.decode(response);
-    setState(() {
-      _services = data["services"];
-    });
-  }
+  // Future<void> readJson() async {
+  //   final String response = await rootBundle.loadString('assets/services.json');
+  //   final data = await json.decode(response);
+  //   setState(() {
+  //     _services = data["services"];
+  //   });
+  // }
   Widget buildDialog(BuildContext context, String msg){
     return AlertDialog(
       content: Text(msg),
@@ -180,10 +104,63 @@ class _registerstate extends State<register> {
     TextEditingController _nameController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     TextEditingController _passwordconfirmController = TextEditingController();
+    List<dynamic> _services = [];
+    double _height = 0;
+    List<Service> servicesControllers = [];
+    late List<String> choosedServices;
+    late List<String> choosedServicesPrices;
+  Future<void> getAllServices() async {
+    Uri url = Uri.parse(url_help.getAllServices);
+    Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
+
+    await requestHelp.requestGet(url,header).then((responce) async {
+      if (responce.statusCode == 200) {
+        _services =  json.decode(responce.body);
+        print(_services);
+        values = List<bool>.filled(_services.length, false);
+        _services.forEach((element) {
+          servicesControllers.add(new Service(TextEditingController(), element["id"]));
+        });
+      }
+
+    });
+
+  }
+  Widget userInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType, IconData icon, bool secure) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(color: Color(0xffEAEEF6), borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: TextField(
+          controller: userInput,
+          obscureText: secure,
+          decoration: InputDecoration(
+            hintText: hintTitle,
+            hintStyle: TextStyle(fontSize: 18, color: Color(0xffB1B2BB), fontStyle: FontStyle.italic),
+            contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+            border: InputBorder.none,
+            prefixIcon: Icon(icon,color: Colors.indigo.shade800,),
+
+          ),
+          keyboardType: keyboardType,
+        ),
+      ),
+    );
+
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAllServices().then((value){
+      setState(() {});
+    });
+  }
   @override
   Widget build(BuildContext context) {
-    readJson();
-    configLoading();
+    // readJson();
     void click() {
       Navigator.pushNamed(context, 'login');
     }
@@ -200,22 +177,29 @@ class _registerstate extends State<register> {
         showDialog(context: context, builder: (BuildContext context) { return buildDialog(context, 'Password must be at least 6 characters');});
       }
       else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailController.text)){
-        showDialog(context: context,
-        builder: (BuildContext context) { return buildDialog(context, 'Email address is badly formatted');}
-        );
+        showError('Email address is badly formatted');
+
       }else if (_passwordController.text != _passwordconfirmController.text){
         hideLoading();
-        showDialog(context: context,
-            builder: (BuildContext context) { return buildDialog(context, 'Passwords don\'t match');}
-        );
+        showError('Passwords doesn\'t match');
+
       }
       else if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _nameController.text.isNotEmpty) {
+        choosedServices = [];
+        choosedServicesPrices = [];
+        servicesControllers.where((element) => element.getController().text != "").toList().forEach((element) {
+          print("service Id: ${element.getServiceId()}, Price: ${element.getController().text}");
+          choosedServices.add(element.getServiceId());
+          choosedServicesPrices.add(element.getController().text);
+          print(choosedServices);
+        });
         FirebaseMessaging.instance.getToken().then((Dtoken) async {
           final prefs = await SharedPreferences.getInstance();
           url_helper.Constants constants = new url_helper.Constants();
           request_helper request_help = new request_helper();
           await getDeviceDetails();
           Uri uri = Uri.parse(constants.register);
+
           Map<String, dynamic> body = {
             "device_type": await prefs.getString('deviceType'),
             "device_id": await prefs.getString("identifier"),
@@ -225,6 +209,7 @@ class _registerstate extends State<register> {
             "email": _emailController.text,
             "password": _passwordController.text,
             "password_confirmation": _passwordconfirmController.text,
+
             "mobile": "01124472355"
           };
           request_help.requestPost(uri, body).then((response) {
@@ -245,197 +230,205 @@ class _registerstate extends State<register> {
 
 
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
+        resizeToAvoidBottomInset :_height==0? false: true,
+        body:  Stack(
+            children: [
+              Container(
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
 
-                Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 30),
-                    child: Container(
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width,
-
-
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-
-                        children: [
-
-                          SizedBox(height: 15.0.h,),
-                          Container(
+                      Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 30),
+                          child: Container(
                             width: MediaQuery
                                 .of(context)
                                 .size
                                 .width,
-                            height: 7.5.h,
-                            child: TextField(
-                              controller: _nameController,
-                              decoration: InputDecoration(
-                                  labelText: "User name",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                  )
-                              ),
-                            ),
-                          ),
 
-                          SizedBox(height: 1.2.h,),
-                          Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: 7.5.h,
-                            child: TextField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                  labelText: "Email Address",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                  )
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 1.2.h,),
-                          Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: 7.5.h,
-                            child: TextField(
-                              controller: _passwordController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  labelText: "Password",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                  )
-                              ),
-                            ),
-                          ),
 
-                          SizedBox(height: 1.2.h,),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
 
-                          Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            height: 7.5.h,
-                            child: TextField(
-                              controller: _passwordconfirmController,
-                              obscureText: true,
-                              decoration: InputDecoration(
-                                  labelText: "Password Confirmation",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(8)),
-                                  )
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 2.0.h,),
 
-                          TextButton(
-                            child: Text("Services"),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
+                              children: [
 
-                                      scrollable: true,
-                                      title: Text('Services'),
+                                SizedBox(height: 15.0.h,),
+                                userInput(_nameController, "User Name", TextInputType.name, Icons.account_circle_rounded, false),
 
-                                      content: StatefulBuilder(
-                                        builder: (BuildContext context, StateSetter setState) {
-                                           return getTableWidgets(_services, setState);
-                                        }),
+                                SizedBox(height: 1.2.h,),
 
-                                      actions: [
-                                        TextButton(
-                                            child: Text("Submit"),
-                                            onPressed: () {
-                                              // your code
-                                            })
-                                      ],
-                                    );
-                                  });
-                            },
-                          ),
-                          // getTableWidgets(_services),
+                                userInput(_emailController, "Email", TextInputType.emailAddress, Icons.account_circle_rounded, false),
 
-                          SizedBox(height: 1.2.h),
-                          GestureDetector(
-                            child: Container(
-                              alignment: Alignment.center,
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width,
-                              decoration: const BoxDecoration(
-                                  borderRadius: BorderRadius.all(
-                                      Radius.circular(50)),
-                                  color: Color(0xff3fbcef)
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: TextButton(
-                                  child: Text('Register',
-                                      style: TextStyle(color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                  onPressed: register,
+                                SizedBox(height: 1.2.h,),
 
+                                userInput(_passwordController, "Password", TextInputType.visiblePassword, Icons.lock, true),
+                                SizedBox(height: 1.2.h,),
+                                userInput(_passwordconfirmController, "Password Confirmation", TextInputType.visiblePassword, Icons.lock, true),
+
+
+                                SizedBox(height: 2.0.h,),
+
+                                // getTableWidgets(_services),
+
+                                SizedBox(height: 1.2.h),
+                                Row(
+                                  children: [
+                                    Expanded(child: Container(
+
+                                      child: ElevatedButton (
+
+                                        onPressed: register,
+                                        child: Text("Register",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,)),
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.indigo.shade800,
+                                          padding: EdgeInsets.all(15),
+                                          shape: RoundedRectangleBorder(
+                                            
+                                            borderRadius: BorderRadius.circular(25)
+                                          )
+                                      ),
+
+                                      ),
+                                      alignment: Alignment.center,
+                                    )),
+                                  ],
                                 ),
-                              ),
-                            ),
-                          ),
 
 
-                          Row(
-                            children: [
-                              Text("You Already have an account?",
-                                style: TextStyle(color: Colors.black),),
-                              TextButton(
-                                onPressed: click,
-                                child: const Text("Login",
-                                  style: TextStyle(
-                                      color: Color(0xff3fbcef)
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text("You Already have an account?",
+                                      style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),),
+                                    TextButton(
+                                      onPressed: click,
+                                      child: const Text("Login",
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontStyle: FontStyle.italic,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+
+                              ],
+                            ),
                           )
-
-
-                        ],
                       ),
-                    )
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        )
+
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: AnimatedContainer(
+                  duration: new Duration(milliseconds: 1000),
+                  curve: Curves.fastOutSlowIn,
+                  height: _height,
+                  width: double.infinity,
+                  child: Card(
+                    elevation: 20,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),
+                    ),
+
+                    child: ListView.builder(
+                      itemCount: _services.length,
+                      itemBuilder: (BuildContext context, int index){
+                        return Container(
+                          margin: EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            children: [
+                              index == 0?
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: TextButton(
+                                        child: Text("Done"),
+                                        onPressed: (){
+                                          for(int i = 0; i < servicesControllers.length; i++) {
+                                            if (servicesControllers[i]
+                                                .getController()
+                                                .text
+                                                .isEmpty && values[i] == true) {
+
+                                              break;
+                                            }else if(values[i] == false){
+                                              setState(() {
+                                                servicesControllers[i]
+                                                    .getController()
+                                                    .text = "";
+                                              });
+                                            } else {
+
+                                              setState(() {
+                                                _height = 0;
+                                              });
+                                            }
+
+                                          }
+
+                                        },
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ): Container(),
+                              index == 0?
+                                  Row(
+                                    children: [
+                                      Expanded(child: Text("Available"),flex: 1,),
+                                      Expanded(child: Container(child: Text("ٍService Name")
+                                      , margin: EdgeInsets.only(left: 8, top: 5),
+                                      ),flex: 2,),
+                                      Expanded(child: Text("Service Price (AED)"),flex: 3,)
+                                    ],
+                                  ): Container(),
+                              Row(
+                                children: [
+                                  Expanded(child: Checkbox(value: values[index], onChanged: (value){
+                                    setState(() {
+                                      values[index] = value!;
+                                    });
+                                  }),flex: 1,),
+                                  Expanded(child: Container(child: Text(_services[index]["name"]), margin: EdgeInsets.only(left: 8),),flex: 2,),
+                                  Expanded(child: TextField(
+                                    decoration: InputDecoration(
+                                      hintText: "Price (AED)",
+                                      errorText: values[index] ? 'Value Can\'t Be Empty' : null,
+                                    ),
+                                    enabled: values[index],
+
+                                    controller: servicesControllers[index].getController(),
+
+                                  ),flex: 3,)
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
     );
   }
 

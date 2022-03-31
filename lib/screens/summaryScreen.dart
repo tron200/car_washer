@@ -1,3 +1,4 @@
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,16 +14,11 @@ class SummaryScreen extends StatelessWidget{
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Summary"),
-        leading:  IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
-          onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        leading:  BadgeIcon(scaffoldKey: _scaffoldKey,),
         centerTitle: true,
         backgroundColor: Colors.blue.shade800,
       ),
-      drawer: myDrawer(index: 5,),
+      drawer: myDrawer(index: 6,),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

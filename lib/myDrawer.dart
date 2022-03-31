@@ -47,7 +47,7 @@ class _myDrawerState extends State<myDrawer> {
 
 
 
-  List<bool> isSelected = List<bool>.filled(9, false);
+  List<bool> isSelected = List<bool>.filled(10, false);
   String dropdownvalue = 'En';
   late String? userjson= "";
   Future<Map<String, dynamic>> getData() async{
@@ -203,55 +203,63 @@ class _myDrawerState extends State<myDrawer> {
             selected: isSelected[2],
           ),
           ListTile(
-            title: const Text('Processing'),
+            title: const Text('Pending Requests'),
             onTap: () {
               isSelected[3]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'processing');
+              Navigator.pushReplacementNamed(context, 'pending');
             },
             selected: isSelected[3],
+          ),
+          ListTile(
+            title: const Text('Processing Requests'),
+            onTap: () {
+              isSelected[4]? Navigator.pop(context):
+              Navigator.pushReplacementNamed(context, 'processing');
+            },
+            selected: isSelected[4],
           ),
           ListTile(
             title: const Text('Documents'),
             onTap: () {
 // Update the state of the app.
 // ...
-              isSelected[4]? Navigator.pop(context):
+              isSelected[5]? Navigator.pop(context):
               Navigator.pushReplacementNamed(context, 'document');
 
-            },
-            selected: isSelected[4],
-          ),
-          ListTile(
-            title: const Text('Summary'),
-            onTap: () {
-              isSelected[5]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'summary');
             },
             selected: isSelected[5],
           ),
           ListTile(
-            title: const Text('Notification'),
+            title: const Text('Summary'),
             onTap: () {
               isSelected[6]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'notification');
+              Navigator.pushReplacementNamed(context, 'summary');
             },
             selected: isSelected[6],
           ),
           ListTile(
-            title: const Text('Withdraw'),
+            title: const Text('Notification'),
             onTap: () {
               isSelected[7]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'withdraw');
+              Navigator.pushNamed(context, 'notification');
             },
             selected: isSelected[7],
           ),
           ListTile(
-            title: const Text('Help'),
+            title: const Text('Withdraw'),
             onTap: () {
               isSelected[8]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'help');
+              Navigator.pushReplacementNamed(context, 'withdraw');
             },
             selected: isSelected[8],
+          ),
+          ListTile(
+            title: const Text('Help'),
+            onTap: () {
+              isSelected[9]? Navigator.pop(context):
+              Navigator.pushReplacementNamed(context, 'help');
+            },
+            selected: isSelected[9],
           ),
           ListTile(
             title: const Text('Change Language'),

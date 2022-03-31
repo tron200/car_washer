@@ -1,4 +1,5 @@
 import 'package:car_washer/Auth/otpVerfication.dart';
+import 'package:car_washer/chooseLocationScreen.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 import 'package:car_washer/screens/earningScreen.dart';
 import 'package:car_washer/screens/helpScreen.dart';
@@ -17,6 +18,7 @@ import 'package:sizer/sizer.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'screens/addAcountScreen.dart';
+import 'screens/pendingScreen.dart';
 import 'screens/processingScreen.dart';
 import 'wrapper.dart';
 
@@ -70,7 +72,7 @@ class MyApp extends StatelessWidget {
           'notification': (context) => NotificationScreen(),
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
-          'otp': (context) => otpVerfication(),
+          'pending': (context) => PendingScreen(),
           'processing': (context) => ProcessingScreen(),
           'addaccount': (context) => AddAccountScreen(),
         },

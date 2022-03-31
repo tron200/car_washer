@@ -5,6 +5,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -130,15 +131,10 @@ class _DocumentScreenState extends State<DocumentScreen>{
         backgroundColor: Colors.blue.shade800,
         title: Text("Documents"),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.menu, color: Colors.white,),
-          onPressed: (){
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
+        leading: BadgeIcon(scaffoldKey: _scaffoldKey)
 
       ),
-      drawer: myDrawer(index: 4,),
+      drawer: myDrawer(index: 5,),
       body: Stack(
         children: [
           Container(
