@@ -20,7 +20,9 @@ class _otpVerficationState extends State<otpVerfication>{
   int _index = 0;
   static Map<String, dynamic> body = new HashMap();
 
-
+  void submitOtp(){
+    ///////////////////////////
+  }
   // final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   final FocusNode _otpFoucsNode = FocusNode();
@@ -60,26 +62,31 @@ class _otpVerficationState extends State<otpVerfication>{
         Container(
 
             padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.0.w),
-            child: PinPut(
-              fieldsCount: 6,
-              textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
-              eachFieldWidth: 40.0,
-              eachFieldHeight: 55.0,
-              controller: _otpController,
-              focusNode: _otpFoucsNode,
-              selectedFieldDecoration: pinOtpCodeVerfication,
-              submittedFieldDecoration: pinOtpCodeVerfication,
-              followingFieldDecoration: pinOtpCodeVerfication,
-              pinAnimationType: PinAnimationType.rotation,
-              onSubmit: (pin) async{
-                try{
-                  String dialCodesDigits = body['dialCodesDigits'];
-                  String phone = body['mobile'];
-                  print("hi $dialCodesDigits  $phone");
-                }catch(e){
+            child: Column(
+              children: [
+                PinPut(
+                  fieldsCount: 6,
+                  textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
+                  eachFieldWidth: 40.0,
+                  eachFieldHeight: 55.0,
+                  controller: _otpController,
+                  focusNode: _otpFoucsNode,
+                  selectedFieldDecoration: pinOtpCodeVerfication,
+                  submittedFieldDecoration: pinOtpCodeVerfication,
+                  followingFieldDecoration: pinOtpCodeVerfication,
+                  pinAnimationType: PinAnimationType.rotation,
+                  onSubmit: (pin) async{
+                    try{
+                      String dialCodesDigits = body['dialCodesDigits'];
+                      String phone = body['mobile'];
+                      print("hi $dialCodesDigits  $phone");
+                    }catch(e){
 
-                }
-              },
+                    }
+                  },
+                ),
+                ElevatedButton(onPressed: submitOtp, child: Text("Submit"))
+              ],
             ),
           )
         );
