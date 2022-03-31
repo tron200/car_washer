@@ -230,7 +230,9 @@ class _registerstate extends State<register> {
     void register() async{
 
       showLoading();
-      await isMobileTaken(_phoneController.text);
+      String s = _phoneController.text[0] =="0"?_phoneController.text.substring(1):_phoneController.text;
+      print(s);
+      await isMobileTaken(s);
       if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty){
         hideLoading();
         showError('Please put some Data');
@@ -263,8 +265,7 @@ class _registerstate extends State<register> {
           await getDeviceDetails();
           Uri uri = Uri.parse(constants.register);
 
-          String s = _phoneController.text[0] =="0"?_phoneController.text.substring(1):_phoneController.text;
-          print(s);
+
           Map<String, dynamic> body = {
             "device_type": await prefs.getString('deviceType'),
             "device_id": await prefs.getString("identifier"),
