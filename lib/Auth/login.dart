@@ -36,6 +36,7 @@ class _loginstate extends State<login> {
   url_helper.Constants constants = new url_helper.Constants();
   void forgetpassword() {
     ////////////////////////////////////////////////////////////////////////////////////////////////////
+
   }
   static Future<bool> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();

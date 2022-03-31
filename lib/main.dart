@@ -11,6 +11,7 @@ import 'package:car_washer/screens/summaryScreen.dart';
 import 'package:car_washer/screens/withdrawScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:car_washer/Auth/register.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Auth/login.dart';
@@ -25,6 +26,9 @@ import 'wrapper.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseMessaging.instance.getToken().then((Dtoken){
+    print(Dtoken);
+  });
   runApp(const MyApp());
   configLoading();
 }

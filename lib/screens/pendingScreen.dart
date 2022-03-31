@@ -42,73 +42,76 @@ class _PendingScreenState extends State<PendingScreen>{
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
-        return  Container(
-          height: MediaQuery.of(context).size.height / 6,
-          child: Card(
-              margin: EdgeInsets.symmetric(vertical: 10),
-              elevation: 10,
+        return  FittedBox(
+          fit: BoxFit.fitWidth,
+          child: Container(
+            
+            height: MediaQuery.of(context).size.height / 6,
+            child: Card(
 
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              color: Colors.greenAccent,
-              child:Padding(
-                padding: EdgeInsets.all(12),
+                elevation: 10,
+
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                color: Colors.greenAccent,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
+                        Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
-                            ),),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Icon(Icons.account_circle_rounded, size: 60,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(list[index]["user_name"]),
-                                Text("Service: ${list[index]["service_name"]}", style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15
-                                ),)
+                                Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15,
+                                ),),
                               ],
-                            )
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(list[index]["user_name"]),
+                                    Text("Service: ${list[index]["service_name"]}", style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15
+                                    ),)
+                                  ],
+                                )
+                              ],
+                            ),
+
                           ],
                         ),
-
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Column(
                             children: [
-                              ElevatedButton(onPressed: (){}, child: Text("Accept"),style: ElevatedButton.styleFrom(
-                                  primary: Colors.green
-                              ),),
-                              ElevatedButton(onPressed: (){}, child: Text("Cancel"),style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
-                              ),),
+                               Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    ElevatedButton(onPressed: (){}, child: Text("Accept"),style: ElevatedButton.styleFrom(
+                                        primary: Colors.green,
+                                    ),),
+                                    ElevatedButton(onPressed: (){}, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+                                      primary: Colors.red,
+                                    ),),
+
+                                  ],
+                                ),
 
                             ],
                           ),
-                        )
+
                       ],
-                    )
-                  ],
+                    ),
+
                 ),
               ),
-            ),
+
 
         );
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:car_washer/service.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:device_info/device_info.dart';
@@ -13,6 +14,7 @@ import 'package:sizer/sizer.dart';
 import 'package:car_washer/Helper/url_helper.dart' as url_helper;
 
 import '../Helper/request_helper.dart';
+import 'otpVerfication.dart';
 
 
 class register extends StatefulWidget{
@@ -29,10 +31,12 @@ class _registerstate extends State<register> {
   List<bool> values = [];
   bool va = false;
   request_helper requestHelp = new request_helper();
+  String dialCodesDigits = "+971";
+
 
   url_helper.Constants url_help = new url_helper.Constants();
 
-  static Future<bool> getDeviceDetails() async {
+  static Future<void> getDeviceDetails() async {
     final prefs = await SharedPreferences.getInstance();
     String deviceName="";
     String deviceType="";
@@ -58,7 +62,6 @@ class _registerstate extends State<register> {
     await prefs.setString('deviceName', deviceName);
     await prefs.setString('identifier', identifier);
     //if (!mounted) return;
-    return true;
   }
 
 
@@ -104,7 +107,9 @@ class _registerstate extends State<register> {
     TextEditingController _nameController = TextEditingController();
     TextEditingController _passwordController = TextEditingController();
     TextEditingController _passwordconfirmController = TextEditingController();
-    List<dynamic> _services = [];
+    TextEditingController _phoneController = TextEditingController();
+
+  List<dynamic> _services = [];
     double _height = 0;
     List<Service> servicesControllers = [];
     late List<String> choosedServices;
@@ -126,6 +131,24 @@ class _registerstate extends State<register> {
     });
 
   }
+
+  Future<void> isMobileTaken (String phoneController) async{
+    Uri uri = Uri.parse(url_help.isMobileTaken);
+
+    Map <String, dynamic> body = {
+      "mobile": "${phoneController.trim()}"
+    };
+
+    await requestHelp.requestPost(uri, body).then((response){
+      if(json.decode(response.body)["msg"] == "Available"){
+        isAvailable =true;
+      }else{
+        isAvailable =false;
+      }
+
+    });
+  }
+
   Widget userInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType, IconData icon, bool secure) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
@@ -149,6 +172,44 @@ class _registerstate extends State<register> {
     );
 
   }
+  Widget phoneInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      decoration: BoxDecoration(color: Color(0xffEAEEF6), borderRadius: BorderRadius.circular(30)),
+      child: Padding(
+        padding: const EdgeInsets.all(5),
+        child: Row(
+          children: [
+            CountryCodePicker(
+              onChanged: (country){
+                setState(() {
+                  dialCodesDigits = country.dialCode!;
+                });
+              },
+              initialSelection: "AE",
+              showCountryOnly: false,
+              showOnlyCountryWhenClosed: false,
+              favorite: ["+971","+1","US"],
+            ),
+            Expanded(
+              child: TextField(
+                controller: userInput,
+                decoration: InputDecoration(
+                  hintText: hintTitle,
+                  hintStyle: TextStyle(fontSize: 18, color: Color(0xffB1B2BB), fontStyle: FontStyle.italic),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 15),
+                  border: InputBorder.none,
+
+                ),
+                keyboardType: keyboardType,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+  }
 
   @override
   void initState() {
@@ -158,6 +219,7 @@ class _registerstate extends State<register> {
       setState(() {});
     });
   }
+  bool isAvailable = false;
   @override
   Widget build(BuildContext context) {
     // readJson();
@@ -166,7 +228,9 @@ class _registerstate extends State<register> {
     }
 
     void register() async{
+
       showLoading();
+      await isMobileTaken(_phoneController.text);
       if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty){
         hideLoading();
         showError('Please put some Data');
@@ -183,17 +247,16 @@ class _registerstate extends State<register> {
         hideLoading();
         showError('Passwords doesn\'t match');
 
+      }else if(!isAvailable){
+        hideLoading();
+        showError("The mobile has already been taken.");
       }
-      else if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _nameController.text.isNotEmpty) {
-        choosedServices = [];
-        choosedServicesPrices = [];
-        servicesControllers.where((element) => element.getController().text != "").toList().forEach((element) {
-          print("service Id: ${element.getServiceId()}, Price: ${element.getController().text}");
-          choosedServices.add(element.getServiceId());
-          choosedServicesPrices.add(element.getController().text);
-          print(choosedServices);
-        });
-        FirebaseMessaging.instance.getToken().then((Dtoken) async {
+      else if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _nameController.text.isNotEmpty && _phoneController.text.isNotEmpty) {
+
+
+
+
+         FirebaseMessaging.instance.getToken().then((Dtoken) async {
           final prefs = await SharedPreferences.getInstance();
           url_helper.Constants constants = new url_helper.Constants();
           request_helper request_help = new request_helper();
@@ -209,226 +272,233 @@ class _registerstate extends State<register> {
             "email": _emailController.text,
             "password": _passwordController.text,
             "password_confirmation": _passwordconfirmController.text,
-
-            "mobile": "01124472355"
+            "dialCodesDigits":dialCodesDigits,
+            "mobile": "${_phoneController.text.trim()}"
           };
-          request_help.requestPost(uri, body).then((response) {
-            if (response.statusCode == 200) {
-              print("Done");
-              hideLoading();
-              //Navigator.pushNamed(context, 'otp');
-            } else {
-              hideLoading();
-              showDialog(context: context,
-                  builder: (BuildContext context) { return buildDialog(context, 'Something Went Wrong');}
-              );
-            }
-          });
+          hideLoading();
+          Navigator.push(context, MaterialPageRoute(builder: (context) => otpVerfication(body: body,)));
+          // request_help.requestPost(uri, body).then((response) {
+          //   if (response.statusCode == 200) {
+          //     print("Done");
+          //     hideLoading();
+          //     //Navigator.pushNamed(context, 'otp');
+          //   } else {
+          //     hideLoading();
+          //     showDialog(context: context,
+          //         builder: (BuildContext context) { return buildDialog(context, 'Something Went Wrong');}
+          //     );
+          //   }
+          // });
         });
       }
       }
 
 
+
     return Scaffold(
-        resizeToAvoidBottomInset :_height==0? false: true,
-        body:  Stack(
-            children: [
-              Container(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height,
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+        body:
+              SingleChildScrollView(
+                child: Container(
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width,
 
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
 
-                      Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 30),
-                          child: Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-
-
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 30),
+                            child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
 
 
-                              children: [
-
-                                SizedBox(height: 15.0.h,),
-                                userInput(_nameController, "User Name", TextInputType.name, Icons.account_circle_rounded, false),
-
-                                SizedBox(height: 1.2.h,),
-
-                                userInput(_emailController, "Email", TextInputType.emailAddress, Icons.account_circle_rounded, false),
-
-                                SizedBox(height: 1.2.h,),
-
-                                userInput(_passwordController, "Password", TextInputType.visiblePassword, Icons.lock, true),
-                                SizedBox(height: 1.2.h,),
-                                userInput(_passwordconfirmController, "Password Confirmation", TextInputType.visiblePassword, Icons.lock, true),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
 
 
-                                SizedBox(height: 2.0.h,),
-
-                                // getTableWidgets(_services),
-
-                                SizedBox(height: 1.2.h),
-                                Row(
-                                  children: [
-                                    Expanded(child: Container(
-
-                                      child: ElevatedButton (
-
-                                        onPressed: register,
-                                        child: Text("Register",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,)),
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.indigo.shade800,
-                                          padding: EdgeInsets.all(15),
-                                          shape: RoundedRectangleBorder(
-                                            
-                                            borderRadius: BorderRadius.circular(25)
-                                          )
-                                      ),
-
-                                      ),
-                                      alignment: Alignment.center,
-                                    )),
-                                  ],
-                                ),
-
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("You Already have an account?",
-                                      style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),),
-                                    TextButton(
-                                      onPressed: click,
-                                      child: const Text("Login",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontStyle: FontStyle.italic,
-                                            fontWeight: FontWeight.bold
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-
-                              ],
-                            ),
-                          )
-                      ),
-                    ],
-                  ),
-                ),
-
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: AnimatedContainer(
-                  duration: new Duration(milliseconds: 1000),
-                  curve: Curves.fastOutSlowIn,
-                  height: _height,
-                  width: double.infinity,
-                  child: Card(
-                    elevation: 20,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),
-                    ),
-
-                    child: ListView.builder(
-                      itemCount: _services.length,
-                      itemBuilder: (BuildContext context, int index){
-                        return Container(
-                          margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: Column(
-                            children: [
-                              index == 0?
-                              Row(
                                 children: [
-                                  Expanded(
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: TextButton(
-                                        child: Text("Done"),
-                                        onPressed: (){
-                                          for(int i = 0; i < servicesControllers.length; i++) {
-                                            if (servicesControllers[i]
-                                                .getController()
-                                                .text
-                                                .isEmpty && values[i] == true) {
 
-                                              break;
-                                            }else if(values[i] == false){
-                                              setState(() {
-                                                servicesControllers[i]
-                                                    .getController()
-                                                    .text = "";
-                                              });
-                                            } else {
+                                  SizedBox(height: 15.0.h,),
+                                  userInput(_nameController, "User Name", TextInputType.name, Icons.account_circle_rounded, false),
 
-                                              setState(() {
-                                                _height = 0;
-                                              });
-                                            }
 
-                                          }
+                                  SizedBox(height: 1.2.h,),
 
-                                        },
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ): Container(),
-                              index == 0?
+                                  userInput(_emailController, "Email", TextInputType.emailAddress, Icons.email, false),
+
+                                  SizedBox(height: 1.2.h,),
+
+                                  userInput(_passwordController, "Password", TextInputType.visiblePassword, Icons.lock, true),
+                                  SizedBox(height: 1.2.h,),
+                                  userInput(_passwordconfirmController, "Password Confirmation", TextInputType.visiblePassword, Icons.lock, true),
+                                  SizedBox(height: 1.2.h,),
+
+                                  phoneInput(_phoneController, "Phone Number", TextInputType.number),
+
+
+                                  SizedBox(height: 2.0.h,),
+
+                                  // getTableWidgets(_services),
+
+                                  SizedBox(height: 1.2.h),
                                   Row(
                                     children: [
-                                      Expanded(child: Text("Available"),flex: 1,),
-                                      Expanded(child: Container(child: Text("ٍService Name")
-                                      , margin: EdgeInsets.only(left: 8, top: 5),
-                                      ),flex: 2,),
-                                      Expanded(child: Text("Service Price (AED)"),flex: 3,)
+                                      Expanded(child: Container(
+
+                                        child: ElevatedButton (
+
+                                          onPressed: register,
+                                          child: Text("Register",style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700, color: Colors.white,)),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.indigo.shade800,
+                                            padding: EdgeInsets.all(15),
+                                            shape: RoundedRectangleBorder(
+                                              
+                                              borderRadius: BorderRadius.circular(25)
+                                            )
+                                        ),
+
+                                        ),
+                                        alignment: Alignment.center,
+                                      )),
                                     ],
-                                  ): Container(),
-                              Row(
-                                children: [
-                                  Expanded(child: Checkbox(value: values[index], onChanged: (value){
-                                    setState(() {
-                                      values[index] = value!;
-                                    });
-                                  }),flex: 1,),
-                                  Expanded(child: Container(child: Text(_services[index]["name"]), margin: EdgeInsets.only(left: 8),),flex: 2,),
-                                  Expanded(child: TextField(
-                                    decoration: InputDecoration(
-                                      hintText: "Price (AED)",
-                                      errorText: values[index] ? 'Value Can\'t Be Empty' : null,
-                                    ),
-                                    enabled: values[index],
+                                  ),
 
-                                    controller: servicesControllers[index].getController(),
 
-                                  ),flex: 3,)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("You Already have an account?",
+                                        style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic),),
+                                      TextButton(
+                                        onPressed: click,
+                                        child: const Text("Login",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+
                                 ],
                               ),
-                            ],
-                          ),
-                        );
-                      },
+                            )
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              )
-            ],
-          )
+              ),
+
+              // Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child: AnimatedContainer(
+              //     duration: new Duration(milliseconds: 1000),
+              //     curve: Curves.fastOutSlowIn,
+              //     height: _height,
+              //     width: double.infinity,
+              //     child: Card(
+              //       elevation: 20,
+              //       shape: RoundedRectangleBorder(
+              //         borderRadius: BorderRadius.only(topRight: Radius.circular(25), topLeft: Radius.circular(25)),
+              //       ),
+              //
+              //       child: ListView.builder(
+              //         itemCount: _services.length,
+              //         itemBuilder: (BuildContext context, int index){
+              //           return Container(
+              //             margin: EdgeInsets.symmetric(horizontal: 10),
+              //             child: Column(
+              //               children: [
+              //                 index == 0?
+              //                 Row(
+              //                   children: [
+              //                     Expanded(
+              //                       child: Align(
+              //                         alignment: Alignment.centerRight,
+              //                         child: TextButton(
+              //                           child: Text("Done"),
+              //                           onPressed: (){
+              //                             for(int i = 0; i < servicesControllers.length; i++) {
+              //                               if (servicesControllers[i]
+              //                                   .getController()
+              //                                   .text
+              //                                   .isEmpty && values[i] == true) {
+              //
+              //                                 break;
+              //                               }else if(values[i] == false){
+              //                                 setState(() {
+              //                                   servicesControllers[i]
+              //                                       .getController()
+              //                                       .text = "";
+              //                                 });
+              //                               } else {
+              //
+              //                                 setState(() {
+              //                                   _height = 0;
+              //                                 });
+              //                               }
+              //
+              //                             }
+              //
+              //                           },
+              //                         ),
+              //                       ),
+              //                     )
+              //                   ],
+              //                 ): Container(),
+              //                 index == 0?
+              //                     Row(
+              //                       children: [
+              //                         Expanded(child: Text("Available"),flex: 1,),
+              //                         Expanded(child: Container(child: Text("ٍService Name")
+              //                         , margin: EdgeInsets.only(left: 8, top: 5),
+              //                         ),flex: 2,),
+              //                         Expanded(child: Text("Service Price (AED)"),flex: 3,)
+              //                       ],
+              //                     ): Container(),
+              //                 Row(
+              //                   children: [
+              //                     Expanded(child: Checkbox(value: values[index], onChanged: (value){
+              //                       setState(() {
+              //                         values[index] = value!;
+              //                       });
+              //                     }),flex: 1,),
+              //                     Expanded(child: Container(child: Text(_services[index]["name"]), margin: EdgeInsets.only(left: 8),),flex: 2,),
+              //                     Expanded(child: TextField(
+              //                       decoration: InputDecoration(
+              //                         hintText: "Price (AED)",
+              //                         errorText: values[index] ? 'Value Can\'t Be Empty' : null,
+              //                       ),
+              //                       enabled: values[index],
+              //
+              //                       controller: servicesControllers[index].getController(),
+              //
+              //                     ),flex: 3,)
+              //                   ],
+              //                 ),
+              //               ],
+              //             ),
+              //           );
+              //         },
+              //       ),
+              //     ),
+              //   ),
+              // )
+
+
     );
   }
 

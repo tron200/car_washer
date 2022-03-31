@@ -90,6 +90,7 @@ class _HomeScreenState extends State<HomeScreen>{
 
   Future<void> getProfileData() async {
     final prefs = await SharedPreferences.getInstance();
+    print(await prefs.getString("access_token"));
     Uri url = Uri.parse(url_help.USER_PROFILE_API);
     var token = await prefs.getString("access_token");
     Map<String, String> header = {
@@ -153,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen>{
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
-                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height / 1.5, bottom: MediaQuery.of(context).size.height / 6.4),
+                  padding: EdgeInsets.only(top: 10.0.h ,bottom: MediaQuery.of(context).size.height / 6.4),
                   markers: _markers,
                   onTap: (click){
                     print(click);

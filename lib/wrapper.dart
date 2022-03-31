@@ -71,6 +71,6 @@ class _WrapperState extends State<Wrapper>{
   Widget build(BuildContext context) {
 
     // TODO: implement build
-    return user == "" ? login(): HomeScreen();
+    return user == "" || user == null? login(): HomeScreen();
   }
 }

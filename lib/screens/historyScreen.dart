@@ -99,7 +99,7 @@ class _PastRidesTapState extends State<PastRidesTap>{
                         ),
                         Row(
                           children: [
-                            Icon(Icons.account_circle_rounded, size: 60,),
+                            Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -113,6 +113,7 @@ class _PastRidesTapState extends State<PastRidesTap>{
                           ],
                         ),
                         Expanded(
+                          flex: 1,
                           child: Text("Date: ${list[index]["date"]}", style: TextStyle(
                               fontWeight: FontWeight.bold
                           ),)
