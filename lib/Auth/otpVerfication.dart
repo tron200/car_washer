@@ -19,7 +19,7 @@ class otpVerfication extends StatefulWidget{
 class _otpVerficationState extends State<otpVerfication>{
   int _index = 0;
   static Map<String, dynamic> body = new HashMap();
-
+  static String smsCode = "";
   void submitOtp(){
     ///////////////////////////
   }
@@ -35,17 +35,23 @@ class _otpVerficationState extends State<otpVerfication>{
     )
   );
 
+
+
 @override
   void initState() {
     // TODO: implement initState
     super.initState();
     body = widget.body;
   }
+    static String verificationId1 = "";
+    static bool recived = false;
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    WidgetsFlutterBinding.ensureInitialized();
     String dialCodesDigits = body['dialCodesDigits'];
     String phone = body['mobile'];
+    sendverifyphone(dialCodesDigits, phone, smsCode);
     print("hi $dialCodesDigits  $phone");
     return Scaffold(
       appBar: AppBar(
@@ -62,8 +68,7 @@ class _otpVerficationState extends State<otpVerfication>{
         Container(
 
             padding: EdgeInsets.symmetric(vertical: 8.0.h, horizontal: 8.0.w),
-            child: Column(
-              children: [
+            child:
                 PinPut(
                   fieldsCount: 6,
                   textStyle: TextStyle(fontSize: 25.0, color: Colors.white),
@@ -77,20 +82,53 @@ class _otpVerficationState extends State<otpVerfication>{
                   pinAnimationType: PinAnimationType.rotation,
                   onSubmit: (pin) async{
                     try{
-                      String dialCodesDigits = body['dialCodesDigits'];
-                      String phone = body['mobile'];
-                      print("hi $dialCodesDigits  $phone");
+                      verifyPhone();
+
+                      // String dialCodesDigits = body['dialCodesDigits'];
+                      // String phone = body['mobile'];
+                      // print("hi $dialCodesDigits  $phone");
                     }catch(e){
 
                     }
                   },
                 ),
-                ElevatedButton(onPressed: submitOtp, child: Text("Submit"))
-              ],
-            ),
+
+
           )
         );
 
 
+  }
+  sendverifyphone(String dialCodesDigits, String phone,String smsCode) async {
+
+    FirebaseAuth auth = FirebaseAuth.instance;
+    await auth.verifyPhoneNumber(
+      phoneNumber: "${dialCodesDigits}${phone}",
+      verificationCompleted: (PhoneAuthCredential credential) async {
+        // ANDROID ONLY!
+        print("hi $credential");
+        // Sign the user in (or link) with the auto-generated credential
+        await auth.signInWithCredential(credential);
+      }, verificationFailed: (FirebaseAuthException error) {
+      print(error.message);
+    },
+      codeAutoRetrievalTimeout: (String verificationId) {
+        print("alooooooohhhhhhhhhhhh");
+      },
+      codeSent: (String verificationId, int? forceResendingToken) async {
+        print("aloooooooooooooooo");
+        // Create a PhoneAuthCredential with the code
+        verificationId1 = verificationId;
+        recived = true;
+
+        // Sign the user in (or link) with the credential
+      },
+    );
+  }
+  verifyPhone() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId: verificationId1, smsCode: _otpController.text);
+    await auth.signInWithCredential(credential);
   }
 }
