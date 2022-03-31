@@ -263,6 +263,8 @@ class _registerstate extends State<register> {
           await getDeviceDetails();
           Uri uri = Uri.parse(constants.register);
 
+          String s = _phoneController.text[0] =="0"?_phoneController.text.substring(1):_phoneController.text;
+          print(s);
           Map<String, dynamic> body = {
             "device_type": await prefs.getString('deviceType'),
             "device_id": await prefs.getString("identifier"),
@@ -273,22 +275,10 @@ class _registerstate extends State<register> {
             "password": _passwordController.text,
             "password_confirmation": _passwordconfirmController.text,
             "dialCodesDigits":dialCodesDigits,
-            "mobile": "${_phoneController.text.trim()}"
+            "mobile": "${s}"
           };
           hideLoading();
           Navigator.push(context, MaterialPageRoute(builder: (context) => otpVerfication(body: body,)));
-          // request_help.requestPost(uri, body).then((response) {
-          //   if (response.statusCode == 200) {
-          //     print("Done");
-          //     hideLoading();
-          //     //Navigator.pushNamed(context, 'otp');
-          //   } else {
-          //     hideLoading();
-          //     showDialog(context: context,
-          //         builder: (BuildContext context) { return buildDialog(context, 'Something Went Wrong');}
-          //     );
-          //   }
-          // });
         });
       }
       }

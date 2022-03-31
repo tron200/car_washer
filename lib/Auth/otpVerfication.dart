@@ -1,12 +1,16 @@
 import 'dart:collection';
 
+import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:sizer/sizer.dart';
+
+import '../Helper/url_helper.dart' as url_helper;
 
 
 class otpVerfication extends StatefulWidget{
@@ -110,13 +114,10 @@ class _otpVerficationState extends State<otpVerfication>{
         // Sign the user in (or link) with the auto-generated credential
         await auth.signInWithCredential(credential);
       }, verificationFailed: (FirebaseAuthException error) {
-      print(error.message);
     },
       codeAutoRetrievalTimeout: (String verificationId) {
-        print("alooooooohhhhhhhhhhhh");
       },
       codeSent: (String verificationId, int? forceResendingToken) async {
-        print("aloooooooooooooooo");
         // Create a PhoneAuthCredential with the code
         verificationId1 = verificationId;
         recived = true;
@@ -125,10 +126,41 @@ class _otpVerficationState extends State<otpVerfication>{
       },
     );
   }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
+
+  }
+
+  void showError(String msg){
+    EasyLoading.showError(msg);
+  }
   verifyPhone() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId1, smsCode: _otpController.text);
-    await auth.signInWithCredential(credential);
+    showLoading();
+    await auth.signInWithCredential(credential).then((value){
+      if(value.user != null){
+        url_helper.Constants url_help = new url_helper.Constants();
+        request_helper request_help = new request_helper();
+        Uri uri = Uri.parse(url_help.register);
+        request_help.requestPost(uri, body).then((response) {
+          if (response.statusCode == 200) {
+            print(response.body);
+            hideLoading();
+            //Navigator.pushNamed(context, 'otp');
+          } else {
+            hideLoading();
+            showError("registration error");
+
+          }
+        });
+      }
+    });
   }
 }
