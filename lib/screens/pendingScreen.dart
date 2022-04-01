@@ -5,6 +5,7 @@ import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:car_washer/Helper/request_helper.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../Helper/url_helper.dart' as url_helper;
 
 class PendingScreen extends StatefulWidget{
@@ -46,84 +47,142 @@ class _PendingScreenState extends State<PendingScreen>{
   Widget ListHistory(List<dynamic> list){
     return ListView.builder(
       itemCount: list.length,
+      padding: const EdgeInsets.only(top: 10.0),
       itemBuilder: (BuildContext context,int index){
-        return  FittedBox(
-          fit: BoxFit.fitWidth,
-          child: Container(
+        return  Container(
 
-            height: MediaQuery.of(context).size.height /6,
-            child: Card(
-              
-                elevation: 10,
+          height: MediaQuery.of(context).size.height /5,
+          child: Card(
 
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                color: Colors.greenAccent,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      // Text(list[index]["user_name"]),
-                                      // Text("Service: ${list[index]["service_name"]}", style: TextStyle(
-                                      //     fontWeight: FontWeight.bold,
-                                      //     fontSize: 15
-                                      // ),)
-                                    ],
-                                  )
-                                ],
-                              ),
+            elevation: 10,
 
-                            ],
-                          ),
-                          Column(
-                              children: [
-                                 Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ElevatedButton(onPressed: (){}, child: Text("Accept"),style: ElevatedButton.styleFrom(
-                                          primary: Colors.green,
-                                      ),),
-                                      ElevatedButton(onPressed: (){}, child: Text("Cancel"),style: ElevatedButton.styleFrom(
-                                        primary: Colors.red,
-                                      ),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            color: Colors.greenAccent,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child :Column(
 
-                                    ],
-                                  ),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
 
-                              ],
-                            ),
-
-                        ],
+                        ),),
                       ),
-                ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(list[index]["user_name"]),
+                          Text("Service: ${list[index]["service_name"]}", style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15
+                          ),)
+                        ],
+                      )
+                    ],
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(onPressed: (){}, child: Text("Accept"),style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                        ),),
+                        ElevatedButton(onPressed: (){}, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                        ),),
 
-                ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              // child: Row(
+              //   mainAxisSize: MainAxisSize.min,
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Column(
+              //       mainAxisSize: MainAxisSize.min,
+              //
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Row(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 15,
+              //             ),),
+              //           ],
+              //         ),
+              //         Row(
+              //           children: [
+              //             Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
+              //             Column(
+              //               crossAxisAlignment: CrossAxisAlignment.start,
+              //               children: [
+              //                 Text(list[index]["user_name"]),
+              //                 Text("Service: ${list[index]["service_name"]}", style: TextStyle(
+              //                     fontWeight: FontWeight.bold,
+              //                     fontSize: 15
+              //                 ),)
+              //               ],
+              //             )
+              //           ],
+              //         ),
+              //
+              //       ],
+              //     ),
+              //     Column(
+              //       mainAxisSize: MainAxisSize.min,
+              //       children: [
+              //         Column(
+              //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //           children: [
+              //             ElevatedButton(onPressed: () async {
+              //               Uri uri = Uri.parse(url_help.acceptRequest);
+              //               Map<String,dynamic> body = {
+              //                 "request_id" : list[index]['id'],
+              //               };
+              //               await requestHelp.requestPost(uri, body);
+              //             }, child: Text("Accept"),style: ElevatedButton.styleFrom(
+              //               primary: Colors.green,
+              //             ),),
+              //             ElevatedButton(onPressed: () async {
+              //               Uri uri = Uri.parse(url_help.cancelRequest);
+              //               Map<String,dynamic> body = {
+              //                 "request_id" : list[index]['id'],
+              //               };
+              //               await requestHelp.requestPost(uri, body);
+              //             }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+              //               primary: Colors.red,
+              //             ),),
+              //
+              //           ],
+              //         ),
+              //
+              //       ],
+              //     ),
+              //
+              //   ],
+              // ),
+            ),
 
-
+          ),
         );
-
-
       },
     );
   }
