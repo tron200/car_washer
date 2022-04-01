@@ -89,9 +89,12 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ElevatedButton(onPressed: (){}, child: Text("Finish", style: TextStyle(
-                              color: Colors.red
-                            ),))
+                            ElevatedButton(onPressed: (){}, child: Text("Finish",style: TextStyle(
+                              color: Colors.black
+                            ),),  style: ElevatedButton.styleFrom(
+                                primary: Colors.red,
+                              padding: EdgeInsets.all(8)
+                            ))
                           ],
                         ),
                       )
