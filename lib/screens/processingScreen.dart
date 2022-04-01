@@ -47,7 +47,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
         return  Container(
-          height: MediaQuery.of(context).size.height / 6,
+          height: MediaQuery.of(context).size.height / 5,
           child: Card(
             margin: EdgeInsets.symmetric(vertical: 10),
             elevation: 10,
@@ -58,10 +58,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
             color: Colors.greenAccent,
             child:Padding(
               padding: EdgeInsets.all(12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
+              child:Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -88,12 +85,20 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                           )
                         ],
                       ),
-
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(onPressed: (){}, child: Text("Finish", style: TextStyle(
+                              color: Colors.red
+                            ),))
+                          ],
+                        ),
+                      )
                     ],
                   ),
 
-                ],
-              ),
+
             ),
           ),
 
