@@ -23,6 +23,7 @@ import 'screens/addAcountScreen.dart';
 import 'screens/pendingScreen.dart';
 import 'screens/processingScreen.dart';
 import 'wrapper.dart';
+import 'package:car_washer/globals.dart' as globals;
 
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +34,8 @@ main() async {
   runApp(const MyApp());
   configLoading();
 }
+
+
 void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 1500)
@@ -63,7 +66,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: chooseLocationScreen(),
+        home: Wrapper(),
 
         routes: {
           'login' : (context) => login(),

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Helper/url_helper.dart' as url_helper;
@@ -130,6 +131,7 @@ class _HomeScreenState extends State<HomeScreen>{
 
     getProfileData();
     getLocations();
+
   }
   @override
   Widget build(BuildContext context) {

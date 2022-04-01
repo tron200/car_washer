@@ -251,7 +251,6 @@ class _registerstate extends State<register> {
             "first_name": _nameController.text,
             "email": _emailController.text,
             "password": _passwordController.text,
-            "password_confirmation": _passwordconfirmController.text,
             "dialCodesDigits":dialCodesDigits,
             "mobile": "${s}"
           };

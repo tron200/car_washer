@@ -116,8 +116,10 @@ class _otpVerficationState extends State<otpVerfication>{
         // Sign the user in (or link) with the auto-generated credential
         await auth.signInWithCredential(credential);
       }, verificationFailed: (FirebaseAuthException error) {
+        hideLoading();
     },
-      codeAutoRetrievalTimeout: (String verificationId) {
+      codeAutoRetrievalTimeout: (String verificationId){
+        hideLoading();
       },
       codeSent: (String verificationId, int? forceResendingToken) async {
         // Create a PhoneAuthCredential with the code
@@ -157,7 +159,7 @@ class _otpVerficationState extends State<otpVerfication>{
             hideLoading();
             //login?
 
-            Navigator.push(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)));
+            //Navigator.push(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)));
           } else {
             hideLoading();
             showError("registration error");

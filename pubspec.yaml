@@ -48,7 +48,7 @@ dependencies:
   google_sign_in: ^5.2.4
   country_code_picker: ^2.0.2
   flutter_login_facebook: ^1.4.1
-  pinput: ^1.2.0
+  pinput: 1.2.0
   flutter_easyloading: ^3.0.3
   country_picker: ^2.0.12
   flutter_material_pickers: ^3.1.2
@@ -62,7 +62,6 @@ dependencies:
   badges: ^2.0.2
   location: ^4.3.0
   geocode: ^1.0.1
-
 
 
 dev_dependencies:
