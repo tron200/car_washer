@@ -128,8 +128,22 @@ class _HomeScreenState extends State<HomeScreen>{
 
 
   }
+int totalEarning = 0;
+  Future<void> getTotalEarning() async {
+    Uri url = Uri.parse("${url_help.totalEarning}${userDauserta["id"]}");
+    Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
-
+    requestHelp.requestGet(url, header).then((response){
+      if(response.statusCode == 200){
+        print("::::::::${response.body}");
+        setState(() {
+          totalEarning = json.decode(response.body);
+        });
+      }else{
+        print("Fail");
+      }
+    });
+  }
   int make = 0;
   Future<void> getWashesData() async {
     Uri url = Uri.parse(url_help.getWashes);
@@ -138,11 +152,13 @@ class _HomeScreenState extends State<HomeScreen>{
     };
 
 
+
+
     requestHelp.requestPost(url,body).then((responce) async {
       if(responce.statusCode == 200) {
-        print(responce.body);
+
         setState(() {
-          make = json.decode(responce.body)["service_make"];
+          make =  json.decode(responce.body)["service_make"]==null?0:json.decode(responce.body)["service_make"];
         });
       }else{
         print(responce.statusCode);
@@ -163,6 +179,7 @@ class _HomeScreenState extends State<HomeScreen>{
         : null;
     getProfileData();
     getWashesData();
+    getTotalEarning();
     getLocations();
 
   }
@@ -241,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen>{
                         margin: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(25),
-                          color: blue800
+                          color: Colors.white
                         ),
                         height: 15.0.h,
                         child: Row(
@@ -251,14 +268,23 @@ class _HomeScreenState extends State<HomeScreen>{
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 // SizedBox(height: 2.0.h,),
-                                Icon(Icons.restore,size:5.0.h,color: Colors.white,),
-                                Text("0", style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white
-                                ),),
                                 Text("Washes", style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.white
+                                    color: Colors.black
+                                ),),
+                                Container(
+                                    width: 75,
+
+                                   decoration: BoxDecoration(
+                                     borderRadius: BorderRadius.circular(30),
+                                     color: Colors.blue.shade800,
+
+                                   ),
+                                   child: Image(image: AssetImage('assets/wash.jpeg'),)
+                                ),
+                                Text("$make", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black
                                 ),),
 
                               ],
@@ -267,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen>{
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Icon(Icons.bar_chart,size: 5.0.h,color: Colors.white,),
-                                Text("0", style: TextStyle(
+                                Text("$totalEarning", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.white
                                 ),),

@@ -35,8 +35,8 @@ class _HistoryScreenState extends State<HistoryScreen>{
         requests =  json.decode(responce.body)["requests"];
         setState(() {
           complete = requests.where((element) => element["request_status"] == "complete").toList();
-          cancelled = requests.where((element) => element["request_status"] == "complete").toList();
-          scheduled = requests.where((element) => element["request_status"] == "complete").toList();
+          cancelled = requests.where((element) => element["request_status"] == "cancelled").toList();
+          scheduled = requests.where((element) => element["request_status"] == "scheduled").toList();
         });
 
 

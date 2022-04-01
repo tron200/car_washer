@@ -98,10 +98,22 @@ class _PendingScreenState extends State<PendingScreen>{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(onPressed: (){}, child: Text("Accept"),style: ElevatedButton.styleFrom(
+                        ElevatedButton(onPressed: () async {
+                          Uri uri = Uri.parse(url_help.acceptRequest);
+                          Map<String,dynamic> body = {
+                            "request_id" : list[index]['id'],
+                          };
+                          await requestHelp.requestPost(uri, body);
+                        }, child: Text("Accept"),style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                         ),),
-                        ElevatedButton(onPressed: (){}, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+                        ElevatedButton(onPressed: () async {
+                          Uri uri = Uri.parse(url_help.cancelRequest);
+                          Map<String,dynamic> body = {
+                            "request_id" : list[index]['id'],
+                          };
+                          await requestHelp.requestPost(uri, body);
+                        }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
                           primary: Colors.red,
                         ),),
 

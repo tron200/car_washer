@@ -91,6 +91,7 @@ flutter:
   # assets:
   #   - assets/services.json
   assets:
+    - assets/
     - assets/services.json
     - assets/documents.json
 

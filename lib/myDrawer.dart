@@ -235,14 +235,7 @@ class _myDrawerState extends State<myDrawer> {
             },
             selected: isSelected[5],
           ),
-          ListTile(
-            title: const Text('Summary'),
-            onTap: () {
-              isSelected[6]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'summary');
-            },
-            selected: isSelected[6],
-          ),
+
           ListTile(
             title: const Text('Notification'),
             onTap: () {
