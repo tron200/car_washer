@@ -66,29 +66,6 @@ class _registerstate extends State<register> {
 
 
 
-
-
-
-  // Future<void> readJson() async {
-  //   final String response = await rootBundle.loadString('assets/services.json');
-  //   final data = await json.decode(response);
-  //   setState(() {
-  //     _services = data["services"];
-  //   });
-  // }
-  Widget buildDialog(BuildContext context, String msg){
-    return AlertDialog(
-      content: Text(msg),
-      actions: [
-        TextButton(
-          child: Text('Ok'),
-          onPressed: (){
-            Navigator.pop(context);
-          },
-        )
-      ],
-    );
-  }
   void showLoading() async{
     await EasyLoading.show(
         status: 'loading...',
@@ -240,7 +217,7 @@ class _registerstate extends State<register> {
 
       }else if (_passwordController.text.length < 6){
         hideLoading();
-        showDialog(context: context, builder: (BuildContext context) { return buildDialog(context, 'Password must be at least 6 characters');});
+        showError('Password must be at least 6 characters');
       }
       else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(_emailController.text)){
         showError('Email address is badly formatted');
@@ -280,6 +257,7 @@ class _registerstate extends State<register> {
           };
           hideLoading();
           Navigator.push(context, MaterialPageRoute(builder: (context) => otpVerfication(body: body,)));
+
         });
       }
       }

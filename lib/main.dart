@@ -7,6 +7,7 @@ import 'package:car_washer/screens/historyScreen.dart';
 import 'package:car_washer/screens/homeScreen.dart';
 import 'package:car_washer/screens/notificationScreen.dart';
 import 'package:car_washer/screens/reviewScreen.dart';
+import 'package:car_washer/screens/servicesScreen.dart';
 import 'package:car_washer/screens/summaryScreen.dart';
 import 'package:car_washer/screens/withdrawScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: Wrapper(),
+        home: chooseLocationScreen(),
 
         routes: {
           'login' : (context) => login(),
