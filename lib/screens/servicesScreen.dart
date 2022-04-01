@@ -59,17 +59,17 @@ class _ServicesScreenState extends State<ServicesScreen>{
     });
     print(servicesId);
     print(servicesPrices);
-    // Map<String, dynamic> body = {
-    //   "provider_id" : id,
-    //   "services_id" :servicesId,
-    //   "service_price" : servicesPrices
-    //
-    // };
-    // requestHelp.requestPost(uri, body).then((response){
-    //   if(response.statusCode == 200){
-    //     print(response.body);
-    //   }
-    // });
+    Map<String, dynamic> body = {
+      "provider_id" : id,
+      "services_id" :servicesId,
+      "service_price" : servicesPrices
+
+    };
+    requestHelp.requestPost(uri, body).then((response){
+      if(response.statusCode == 200){
+        print(response.body);
+      }
+    });
   }
 
   void showError(String msg){
@@ -123,7 +123,7 @@ class _ServicesScreenState extends State<ServicesScreen>{
 
               }
               setProviderServices().then((value){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => chooseLocationScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => chooseLocationScreen(id: id,)));
               });
 
 

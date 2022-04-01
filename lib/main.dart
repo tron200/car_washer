@@ -71,8 +71,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'login' : (context) => login(),
           'register': (context) => register(),
-          'home': (context) => HomeScreen(),
-          'document': (context) => DocumentScreen(),
+          'home': (context) => HomeScreen(isRedirect: false,),
           'summary': (context) => SummaryScreen(),
           'earning': (context) => EarningScreen(),
           'withdraw': (context) => WithdrawScreen(),
@@ -80,8 +79,6 @@ class MyApp extends StatelessWidget {
           'notification': (context) => NotificationScreen(),
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),
-          'pending': (context) => PendingScreen(),
-          'processing': (context) => ProcessingScreen(),
           'addaccount': (context) => AddAccountScreen(),
         },
 

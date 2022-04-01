@@ -4,6 +4,7 @@ import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:car_washer/screens/documentsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Helper/url_helper.dart' as url_helper;
@@ -13,6 +14,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class HomeScreen extends StatefulWidget{
+  bool isRedirect;
+
+  HomeScreen({required this.isRedirect});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -58,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen>{
 
   request_helper requestHelp = new request_helper();
   url_helper.Constants url_help = new url_helper.Constants();
-
+  bool isRedirect = false;
 
   Future<void> getLocations() async{
     Uri uri = Uri.parse("${url_help.getProvidersLocations}275");
@@ -124,12 +128,41 @@ class _HomeScreenState extends State<HomeScreen>{
 
 
   }
+
+
+  int make = 0;
+  Future<void> getWashesData() async {
+    Uri url = Uri.parse(url_help.getWashes);
+    Map<String, String> body = {
+      "provider_id": "${userDauserta["id"]}"
+    };
+
+
+    requestHelp.requestPost(url,body).then((responce) async {
+      if(responce.statusCode == 200) {
+        print(responce.body);
+        setState(() {
+          make = json.decode(responce.body)["service_make"];
+        });
+      }else{
+        print(responce.statusCode);
+      }
+    });
+
+
+
+
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    isRedirect = widget.isRedirect;
+    isRedirect?Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentScreen(id: userDauserta["id"],)))
+        : null;
     getProfileData();
+    getWashesData();
     getLocations();
 
   }

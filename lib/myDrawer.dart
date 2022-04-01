@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:car_washer/screens/pendingScreen.dart';
+
 import '../Helper/url_helper.dart' as url_helper;
 import 'package:car_washer/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,9 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:car_washer/Helper/request_helper.dart';
+import 'package:car_washer/screens/documentsScreen.dart';
+
+import 'screens/processingScreen.dart';
 
 class myDrawer extends StatefulWidget {
   int index;
@@ -206,7 +211,7 @@ class _myDrawerState extends State<myDrawer> {
             title: const Text('Pending Requests'),
             onTap: () {
               isSelected[3]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'pending');
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingScreen(id: "${get["id"]}")));
             },
             selected: isSelected[3],
           ),
@@ -214,7 +219,7 @@ class _myDrawerState extends State<myDrawer> {
             title: const Text('Processing Requests'),
             onTap: () {
               isSelected[4]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'processing');
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProcessingScreen(id: "${get["id"]}")));
             },
             selected: isSelected[4],
           ),
@@ -224,7 +229,8 @@ class _myDrawerState extends State<myDrawer> {
 // Update the state of the app.
 // ...
               isSelected[5]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'document');
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
+                  DocumentScreen(id: "${get["id"]}")));
 
             },
             selected: isSelected[5],

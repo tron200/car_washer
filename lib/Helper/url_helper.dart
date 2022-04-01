@@ -44,4 +44,8 @@ class Constants{
   var setProviderLocation = "https://lamaah.ae/api/provider/requests/setProviderLocation";
   var isMobileTaken = "https://lamaah.ae/api/provider/requests/isMobileTaken";
   var setServices = "https://lamaah.ae/api/provider/requests/setServices";
+  var getWashes = "https://lamaah.ae/api/provider/requests/washes";
+  var getProviderDocuments = "https://lamaah.ae/api/provider/requests/getProviderDocuments/";
+  var getAllDocuments = "https://lamaah.ae/api/provider/requests/getAllDocuments/1";
+  var uploadDocument = "https://lamaah.ae/api/provider/document/upload";
 }

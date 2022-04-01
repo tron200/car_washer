@@ -9,7 +9,8 @@ import 'package:car_washer/Helper/request_helper.dart';
 import '../Helper/url_helper.dart' as url_helper;
 
 class ProcessingScreen extends StatefulWidget{
-
+  String id;
+  ProcessingScreen({required this.id});
   @override
   _ProcessingScreenState createState() => _ProcessingScreenState();
 }
@@ -24,15 +25,17 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
 
   List<dynamic> list = [];
   Future<void> getPendingData() async {
-    Uri url = Uri.parse("${url_help.getAllReguests}2");
+    Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
-        // print(json.decode(responce.body));
-        list =  json.decode(responce.body)["requests"];
+        print(json.decode(responce.body));
+        list =  json.decode(responce.body);
         list = list.where((element) => element["request_status"] == "processing").toList();
 
+      }else{
+        print("not 200");
       }
 
     });
@@ -121,7 +124,12 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
         leading: BadgeIcon(scaffoldKey: _scaffoldKey,)
       ),
       drawer: myDrawer(index: 4,),
-      body: Padding(
+      body: list.isEmpty?
+          Align(
+            alignment: Alignment.center,
+            child: Text("You Have No Processing Requests"),
+          )
+      :Padding(
         padding: const EdgeInsets.all(12),
         child: ListHistory(list),
       ),

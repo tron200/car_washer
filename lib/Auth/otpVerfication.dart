@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pinput/pin_put/pin_put.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 import '../Helper/url_helper.dart' as url_helper;
@@ -144,6 +145,7 @@ class _otpVerficationState extends State<otpVerfication>{
     EasyLoading.showError(msg);
   }
   verifyPhone() async {
+    final prefs = await SharedPreferences.getInstance();
     FirebaseAuth auth = FirebaseAuth.instance;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId1, smsCode: _otpController.text);
@@ -153,13 +155,13 @@ class _otpVerficationState extends State<otpVerfication>{
         url_helper.Constants url_help = new url_helper.Constants();
         request_helper request_help = new request_helper();
         Uri uri = Uri.parse(url_help.register);
-        request_help.requestPost(uri, body).then((response) {
+        request_help.requestPost(uri, body).then((response) async{
           if (response.statusCode == 200) {
             print(response.body);
             hideLoading();
             //login?
-
-            //Navigator.push(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)));
+            await prefs.setString("access_token", json.decode(response.body)["access_token"]);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)),  (route) => false);
           } else {
             hideLoading();
             showError("registration error");

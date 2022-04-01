@@ -5,22 +5,25 @@ import 'package:location/location.dart';
 import '../Helper/url_helper.dart' as url_helper;
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:geocode/geocode.dart';
+import 'package:car_washer/screens/homeScreen.dart';
 
 class chooseLocationScreen extends StatefulWidget{
+  String id;
+  chooseLocationScreen({required this.id});
   @override
   _chooseLocationScreenState createState() => _chooseLocationScreenState();
 }
 class _chooseLocationScreenState extends State<chooseLocationScreen>{
   request_helper requestHelp = new request_helper();
   url_helper.Constants url_help = new url_helper.Constants();
-
+  late String id;
   Location location = new Location();
   late LocationData _locationData;
 
   Future<void> setProviderLocation(LatLng x) async{
     Uri uri = Uri.parse(url_help.setProviderLocation);
     Map<String, dynamic> body= {
-      "provider_id": 249,
+      "provider_id": id,
       "latitude": x.latitude,
       "longitude": x.longitude
     };
@@ -57,6 +60,7 @@ class _chooseLocationScreenState extends State<chooseLocationScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    id = widget.id;
     getCurrentLocation().then((value){
       x = _locationData.latitude!;
       y = _locationData.longitude!;
@@ -155,7 +159,13 @@ class _chooseLocationScreenState extends State<chooseLocationScreen>{
                         ),
                       )
                     ],
-                  )
+                  ),
+                  ElevatedButton(onPressed: (){
+                    markedLocation != LatLng(0,0)?
+                    setProviderLocation(markedLocation).then((value){
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen(isRedirect: true,)),  (route) => false);
+                    }): null;
+                  }, child: Text("Done"))
                 ],
               ),
             ),
