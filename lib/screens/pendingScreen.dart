@@ -28,14 +28,13 @@ class _PendingScreenState extends State<PendingScreen>{
     Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
-    await requestHelp.requestGet(url,header).then((responce){
+    requestHelp.requestGet(url,header).then((responce){
       if (responce.statusCode == 200) {
         print("::::: ${json.decode(responce.body)}");
         setState(() {
           list =  json.decode(responce.body);
 
         });
-        list = list.where((element) => element["request_status"] == "pending").toList();
 
 
       }
