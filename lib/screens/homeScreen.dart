@@ -177,8 +177,11 @@ int totalEarning = 0;
     // If you're going to use other Firebase services in the background, such as Firestore,
     // make sure you call `initializeApp` before using other Firebase services.
     await Firebase.initializeApp();
-
-    print("Handling a background message: ${message.messageId}");
+    NotificationBody = '${message.notification?.title}';
+    MassageData = '${message.notification?.body}';
+    setState(() {
+      _height = 100;
+    });
   }
   double _height = 0;
   @override
@@ -198,18 +201,16 @@ int totalEarning = 0;
   String NotificationBody = "";
   @override
   Widget build(BuildContext context) {
+
     Color blue800 = Colors.blue.shade800;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       setState(() {
         _height = 100;
       });
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
 
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification?.body}');
-        NotificationBody = 'Notification title: ${message.notification?.title}';
-        MassageData = 'Notification text: ${message.notification?.body}';
+        NotificationBody = '${message.notification?.title}';
+        MassageData = '${message.notification?.body}';
 
       }
     });
