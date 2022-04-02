@@ -216,6 +216,16 @@ int totalEarning = 0;
         setState(() {
           _height = 100;
         });
+        Future.delayed(const Duration(seconds: 5), () {
+
+// Here you can write your code
+
+          setState(() {
+            // Here you can write your code for open new view
+            _height = 0;
+          });
+
+        });
       }
     });
     Locations.isEmpty?null:print("Id : ${Locations[0]["id"]}");
@@ -401,14 +411,7 @@ int totalEarning = 0;
                 margin: EdgeInsets.symmetric(vertical: 4.5.h),
                 duration: new Duration(milliseconds: 1000),
                 curve: Curves.fastOutSlowIn,
-                child: GestureDetector(
-                  onTap: (){
-                    setState(() {
-                      _height = 0;
-
-                    });
-                  },
-                  child: Card(
+                child:  Card(
 
                     elevation: 10,
 
@@ -504,7 +507,7 @@ int totalEarning = 0;
                       // ),
                     ),
 
-                  ),
+
                 ),
               )
             ],
