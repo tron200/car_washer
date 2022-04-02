@@ -8,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import '../Helper/url_helper.dart' as url_helper;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
@@ -306,15 +307,20 @@ int totalEarning = 0;
                                     color: Colors.black
                                 ),),
                                 Container(
+                                    height: 75,
                                     width: 75,
 
                                    decoration: BoxDecoration(
-                                     borderRadius: BorderRadius.circular(30),
+                                     borderRadius: BorderRadius.circular(40),
                                      color: Colors.blue.shade800,
 
                                    ),
-                                   child: Image(image: AssetImage('assets/wash.jpeg'),)
+                                   child: SvgPicture.asset(
+                                          washAsset,
+                                          semanticsLabel: 'Wash Asset',fit: BoxFit.none,
+                                          ),
                                 ),
+
                                 Text("$make", style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black
@@ -323,32 +329,62 @@ int totalEarning = 0;
                               ],
                             ),
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Icon(Icons.bar_chart,size: 5.0.h,color: Colors.white,),
-                                Text("$totalEarning", style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white
-                                ),),
                                 Text("Earnings", style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.white
+                                    color: Colors.black
                                 ),),
+
+                                Container(
+                                  height: 75,
+                                  width: 75,
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: Colors.blue.shade800,
+
+                                  ),
+                                  child: SvgPicture.asset(
+                                    earningAsset,
+                                    semanticsLabel: 'Earning Asset',fit: BoxFit.none,
+                                  ),
+                                ),
+                                Text("$totalEarning", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black
+                                ),),
+
 
                               ],
                             ),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Icon(Icons.attach_money_sharp,size: 5.0.h,color: Colors.white,),
-                                Text("0", style: TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.white
-                                ),),
                                 Text("Commision", style: TextStyle(
                                     fontSize: 15,
-                                    color: Colors.white
+                                    color: Colors.black
                                 ),),
+                                Container(
+                                  height: 75,
+                                  width: 75,
+
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: Colors.blue.shade800,
+
+                                  ),
+                                  child: SvgPicture.asset(
+                                    commisionAsset,
+                                    semanticsLabel: 'Commision Asset',fit: BoxFit.contain,
+                                  ),
+                                ),
+
+                                Text("0", style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.black
+                                ),),
+
 
                               ],
                             )
