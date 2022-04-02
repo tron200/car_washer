@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:badges/badges.dart';
 import 'package:car_washer/screens/historyScreen.dart';
 import 'package:car_washer/screens/pendingScreen.dart';
 
@@ -12,6 +13,7 @@ import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 
 import 'screens/processingScreen.dart';
+import './globals.dart' as globals;
 
 class myDrawer extends StatefulWidget {
   int index;
@@ -215,6 +217,11 @@ class _myDrawerState extends State<myDrawer> {
               isSelected[3]? Navigator.pop(context):
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => PendingScreen(id: "${get["id"]}")));
             },
+            trailing: Badge(
+              badgeColor: Colors.red,
+              badgeContent: Text("${globals.text}"),
+              showBadge: globals.text == 0? false: true,
+            ),
             selected: isSelected[3],
           ),
           ListTile(
