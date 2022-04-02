@@ -83,25 +83,25 @@ class _loginstate extends State<login> {
   }
 
 
-  Widget signInWith(IconData icon,void click()) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
-        borderRadius: BorderRadius.circular(25),
-
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 24, color: icon == Icons.facebook? Colors.blue: Colors.red,),
-          TextButton(onPressed: click, child: Text('Sign in', style: TextStyle(
-            color: Colors.black
-          ),),),
-        ],
-      ),
-    );
-  }
+  // Widget signInWith(IconData icon,void click()) {
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+  //     decoration: BoxDecoration(
+  //       border: Border.all(color: Colors.grey.withOpacity(0.4), width: 1),
+  //       borderRadius: BorderRadius.circular(25),
+  //
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       children: [
+  //         Icon(icon, size: 24, color: icon == Icons.facebook? Colors.blue: Colors.red,),
+  //         TextButton(onPressed: click, child: Text('Sign in', style: TextStyle(
+  //           color: Colors.black
+  //         ),),),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget userInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType) {
     return Container(
@@ -398,16 +398,16 @@ class _loginstate extends State<login> {
                               SizedBox(height: 20),
                               Center(child: TextButton(child: Text('Forgot password ?'), onPressed: forgetpassword,),),
                               SizedBox(height: 20),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 25.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    signInWith(Icons.facebook,facebookLogin),
-                                    signInWith(MyFlutterApp.google_plus_circle, googleLogin),
-                                  ],
-                                ),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(top: 25.0),
+                              //   child: Row(
+                              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              //     children: [
+                              //      signInWith(Icons.facebook,facebookLogin),
+                              //      signInWith(MyFlutterApp.google_plus_circle, googleLogin),
+                              //     ],
+                              //   ),
+                              // ),
                               SizedBox(height: 0.9.h,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

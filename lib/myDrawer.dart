@@ -219,9 +219,8 @@ class _myDrawerState extends State<myDrawer> {
             },
             trailing: Badge(
               badgeColor: Colors.red,
-              badgeContent: Text("${globals.text}"),
               showBadge: globals.text == 0? false: true,
-              animationType: BadgeAnimationType.fade,
+
             ),
             selected: isSelected[3],
           ),
