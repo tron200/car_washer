@@ -159,7 +159,15 @@ bool there = false;
                 Directory tempDir = await getTemporaryDirectory();
                 await File('${tempDir.path}/img').writeAsBytes(
                     buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)).then((value) {
-                  OpenFile.open(value.path);
+                      print(value.path);
+                  OpenFile.open(value.path,type:documents[index]["fileType"] == "pdf"?
+                  "application/${documents[index]["fileType"]}":
+                  documents[index]["fileType"] == "png"?
+                  "image/${documents[index]["fileType"]}":
+                  documents[index]["fileType"] == "jpg"?
+                  "image/${documents[index]["fileType"]}":
+                  "image/${documents[index]["fileType"]}"
+                  );
                 });
 
 
@@ -220,6 +228,7 @@ bool there = false;
                           if (result == null) return;
                           file = File(result.files.first.path!);
                           bytes = await file.readAsBytesSync();
+                          print(file.path);
                           setState(() {
                             _current = index;
                             _docName = "${result.files.first.name}";
@@ -227,7 +236,7 @@ bool there = false;
 
                             // _docPath = "${file.path}";
                             print(_docEX);
-                            if(_docEX == "txt"){
+                            if(_docEX == "txt" || _docEX == "xlsx" || _docEX == "docx"){
                               showError("Wrong Type Of Data");
                             }else{
                               _height = MediaQuery.of(context).size.height / 3;

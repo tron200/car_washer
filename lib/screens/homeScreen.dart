@@ -180,7 +180,7 @@ int totalEarning = 0;
 
     print("Handling a background message: ${message.messageId}");
   }
-
+  double _height = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -194,15 +194,20 @@ int totalEarning = 0;
     getLocations();
 
   }
+  String MassageData = "";
+  String NotificationBody = "";
   @override
   Widget build(BuildContext context) {
     Color blue800 = Colors.blue.shade800;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      _height = 100;
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
+      MassageData = 'Message data: ${message.data}';
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification?.body}');
+        NotificationBody = 'Message also contained a notification: ${message.notification?.body}';
       }
     });
     Locations.isEmpty?null:print("Id : ${Locations[0]["id"]}");
@@ -346,6 +351,115 @@ int totalEarning = 0;
                     )
                   )
                 ],
+              ),
+              AnimatedContainer(
+                height: _height,
+                width: double.infinity,
+                margin: EdgeInsets.symmetric(vertical: 4.5.h),
+                duration: new Duration(milliseconds: 1000),
+                curve: Curves.fastOutSlowIn,
+                child: GestureDetector(
+                  onTap: (){
+                    _height = 0;
+                  },
+                  child: Card(
+
+                    elevation: 10,
+
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    color: Colors.greenAccent,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child :Column(
+
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(MassageData, style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                            color: Colors.black
+                          ),),
+                          Text(NotificationBody, style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.black
+                          ),)
+                        ],
+                      ),
+                      // child: Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     Column(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: [
+                      //         Row(
+                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //           children: [
+                      //             Text("Booking Id: ${list[index]["booking_id"]}", style: TextStyle(
+                      //               fontWeight: FontWeight.bold,
+                      //               fontSize: 15,
+                      //             ),),
+                      //           ],
+                      //         ),
+                      //         Row(
+                      //           children: [
+                      //             Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
+                      //             Column(
+                      //               crossAxisAlignment: CrossAxisAlignment.start,
+                      //               children: [
+                      //                 Text(list[index]["user_name"]),
+                      //                 Text("Service: ${list[index]["service_name"]}", style: TextStyle(
+                      //                     fontWeight: FontWeight.bold,
+                      //                     fontSize: 15
+                      //                 ),)
+                      //               ],
+                      //             )
+                      //           ],
+                      //         ),
+                      //
+                      //       ],
+                      //     ),
+                      //     Column(
+                      //       mainAxisSize: MainAxisSize.min,
+                      //       children: [
+                      //         Column(
+                      //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //           children: [
+                      //             ElevatedButton(onPressed: () async {
+                      //               Uri uri = Uri.parse(url_help.acceptRequest);
+                      //               Map<String,dynamic> body = {
+                      //                 "request_id" : list[index]['id'],
+                      //               };
+                      //               await requestHelp.requestPost(uri, body);
+                      //             }, child: Text("Accept"),style: ElevatedButton.styleFrom(
+                      //               primary: Colors.green,
+                      //             ),),
+                      //             ElevatedButton(onPressed: () async {
+                      //               Uri uri = Uri.parse(url_help.cancelRequest);
+                      //               Map<String,dynamic> body = {
+                      //                 "request_id" : list[index]['id'],
+                      //               };
+                      //               await requestHelp.requestPost(uri, body);
+                      //             }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+                      //               primary: Colors.red,
+                      //             ),),
+                      //
+                      //           ],
+                      //         ),
+                      //
+                      //       ],
+                      //     ),
+                      //
+                      //   ],
+                      // ),
+                    ),
+
+                  ),
+                ),
               )
             ],
 
