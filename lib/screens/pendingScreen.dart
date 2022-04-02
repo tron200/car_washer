@@ -114,6 +114,26 @@ class _PendingScreenState extends State<PendingScreen>{
                       children: [
                         ElevatedButton(onPressed: () async {
                           showLoading();
+                          Uri uri = Uri.parse(url_help.cancelRequest);
+                          Map<String,dynamic> body = {
+                            "request_id" : list[index]['id'],
+                          };
+                          await requestHelp.requestPost(uri, body).then((value){
+                            getPendingRequests().then((value) => hideLoading());
+                          });
+                        }, child: Text("Cancel",style: TextStyle(
+                            color: Colors.white
+                        ),),style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            padding: EdgeInsets.all(8),
+                            elevation: 10,
+                            shadowColor: Colors.red,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)
+                            )
+                        ),),
+                        ElevatedButton(onPressed: () async {
+                          showLoading();
                           Uri uri = Uri.parse(url_help.acceptRequest);
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
@@ -128,25 +148,12 @@ class _PendingScreenState extends State<PendingScreen>{
                             primary: Colors.green,
                             padding: EdgeInsets.all(8),
                             elevation: 10,
-                            shadowColor: Colors.green
+                            shadowColor: Colors.green,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)
+                            )
                         ),),
-                        ElevatedButton(onPressed: () async {
-                          showLoading();
-                          Uri uri = Uri.parse(url_help.cancelRequest);
-                          Map<String,dynamic> body = {
-                            "request_id" : list[index]['id'],
-                          };
-                          await requestHelp.requestPost(uri, body).then((value){
-                            getPendingRequests().then((value) => hideLoading());
-                          });
-                        }, child: Text("Cancel",style: TextStyle(
-                          color: Colors.white
-                        ),),style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            padding: EdgeInsets.all(8),
-                            elevation: 10,
-                            shadowColor: Colors.red
-                        ),),
+
 
                       ],
                     ),

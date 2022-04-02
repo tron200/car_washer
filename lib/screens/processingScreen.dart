@@ -117,7 +117,10 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                                     primary: Colors.red,
                                     padding: EdgeInsets.all(8),
                                     elevation: 10,
-                                    shadowColor: Colors.red
+                                    shadowColor: Colors.red,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25)
+                                    )
                                 )
                             )
 
