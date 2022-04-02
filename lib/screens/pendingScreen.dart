@@ -18,7 +18,7 @@ class PendingScreen extends StatefulWidget{
 
 class _PendingScreenState extends State<PendingScreen>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  bool isLoading = false;
   request_helper requestHelp = new request_helper();
 
   url_helper.Constants url_help = new url_helper.Constants();
@@ -52,9 +52,15 @@ class _PendingScreenState extends State<PendingScreen>{
     await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black);
+    setState(() {
+      isLoading = true;
+    });
   }
   void hideLoading() async{
     await EasyLoading.dismiss();
+    setState(() {
+      isLoading = false;
+    });
 
   }
 
@@ -112,14 +118,15 @@ class _PendingScreenState extends State<PendingScreen>{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(onPressed: () async {
+                        ElevatedButton(onPressed:isLoading? (){}:() async {
                           showLoading();
+
                           Uri uri = Uri.parse(url_help.cancelRequest);
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
                           };
                           await requestHelp.requestPost(uri, body).then((value){
-                            getPendingRequests().then((value) => hideLoading());
+                            getPendingRequests();
                           });
                         }, child: Text("Cancel",style: TextStyle(
                             color: Colors.white
@@ -132,7 +139,7 @@ class _PendingScreenState extends State<PendingScreen>{
                                 borderRadius: BorderRadius.circular(25)
                             )
                         ),),
-                        ElevatedButton(onPressed: () async {
+                        ElevatedButton(onPressed: isLoading? (){}:() async {
                           showLoading();
                           Uri uri = Uri.parse(url_help.acceptRequest);
                           Map<String,dynamic> body = {
@@ -248,7 +255,7 @@ class _PendingScreenState extends State<PendingScreen>{
   }
   @override
   Widget build(BuildContext context) {
-
+    print(isLoading);
     // print(list);
     return Scaffold(
       key: _scaffoldKey,

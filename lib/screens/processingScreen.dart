@@ -19,7 +19,7 @@ class ProcessingScreen extends StatefulWidget{
 
 class _ProcessingScreenState extends State<ProcessingScreen>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  bool isLoading = false;
   request_helper requestHelp = new request_helper();
 
   url_helper.Constants url_help = new url_helper.Constants();
@@ -32,9 +32,11 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
         print(json.decode(responce.body));
-        list =  json.decode(responce.body);
-        list = list.where((element) => element["request_status"] == "processing").toList();
-        hideLoading();
+        setState(() {
+          list =  json.decode(responce.body);
+          list = list.where((element) => element["request_status"] == "processing").toList();
+          hideLoading();
+        });
       }else{
         print("not 200");
         hideLoading();
@@ -49,10 +51,15 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
     await EasyLoading.show(
         status: 'loading...',
         maskType: EasyLoadingMaskType.black);
+    setState(() {
+      isLoading = true;
+    });
   }
   void hideLoading() async{
     await EasyLoading.dismiss();
-
+    setState(() {
+      isLoading = false;
+    });
   }
   Widget ListHistory(List<dynamic> list){
     return ListView.builder(
@@ -103,13 +110,15 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             ElevatedButton(
-                                onPressed: () async {
+                                onPressed:isLoading? null: () async {
                               showLoading();
                               Uri uri = Uri.parse(url_help.completeRequest);
                               Map<String,dynamic> body = {
                                 "request_id" : list[index]['id'],
                               };
-                              await requestHelp.requestPost(uri, body).then((value) => getPendingData());
+                              await requestHelp.requestPost(uri, body).then((value){
+                                getPendingData();
+                              });
                             }, child: Text("Finish",style: TextStyle(
                               color: Colors.white,fontWeight: FontWeight.bold,fontSize: 15,
                               )),
@@ -145,10 +154,10 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+
     showLoading();
-    getPendingData().then((value){
-      setState(() {});
-    });
+    getPendingData();
   }
   @override
   Widget build(BuildContext context) {

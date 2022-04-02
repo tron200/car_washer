@@ -33,7 +33,9 @@ class _HomeScreenState extends State<HomeScreen>{
   List userData =[];
   List<dynamic> Locations = [];
   late GoogleMapController mapController;
-
+  String washAsset = "assets/9055068_bxs_car_wash_icon.svg";
+  String earningAsset = "assets/7067452_earnings_provit_income_icon.svg";
+  String commisionAsset = "assets/4308025_capital_earnings_make_making_money_icon.svg";
   LatLng _center = LatLng(lat, lon);
   static double x = 0;
   static double y = 0;
@@ -236,7 +238,8 @@ int totalEarning = 0;
                         height: 15.0.h,
                         child: Switch(
                           value: value_switch,
-                          onChanged: (bool? value){
+
+                          onChanged: userDauserta["status"] == "approved"?(bool? value){
                             setState(() {
                               value_switch = value!;
                               setStatus(title == "Online"? "offline": "active").then((response){
@@ -244,7 +247,7 @@ int totalEarning = 0;
                                 print(title);
                               });
                             });
-                          },
+                          }:null,
                           activeColor: Colors.green,
                         ),
                       ),
