@@ -20,7 +20,6 @@ class _BadgeState extends State<BadgeIcon>{
       text == 1? null:
       setState(() {
         // Here you can write your code for open new view
-        globals.text = 1;
         text = globals.text;
       });
 

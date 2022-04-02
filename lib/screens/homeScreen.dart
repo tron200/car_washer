@@ -12,6 +12,7 @@ import '../Helper/url_helper.dart' as url_helper;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:car_washer/globals.dart'as globals;
 
 
 class HomeScreen extends StatefulWidget{
@@ -179,6 +180,7 @@ int totalEarning = 0;
     await Firebase.initializeApp();
     NotificationBody = '${message.notification?.title}';
     MassageData = '${message.notification?.body}';
+    globals.text = 1;
     setState(() {
       _height = 100;
     });
@@ -204,14 +206,15 @@ int totalEarning = 0;
 
     Color blue800 = Colors.blue.shade800;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      setState(() {
-        _height = 100;
-      });
+
 
       if (message.notification != null) {
         NotificationBody = '${message.notification?.title}';
         MassageData = '${message.notification?.body}';
-
+        globals.text = 1;
+        setState(() {
+          _height = 100;
+        });
       }
     });
     Locations.isEmpty?null:print("Id : ${Locations[0]["id"]}");
