@@ -200,14 +200,17 @@ int totalEarning = 0;
   Widget build(BuildContext context) {
     Color blue800 = Colors.blue.shade800;
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      _height = 100;
+      setState(() {
+        _height = 100;
+      });
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
-      MassageData = 'Message data: ${message.data}';
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification?.body}');
-        NotificationBody = 'Message also contained a notification: ${message.notification?.body}';
+        NotificationBody = 'Notification title: ${message.notification?.title}';
+        MassageData = 'Notification text: ${message.notification?.body}';
+
       }
     });
     Locations.isEmpty?null:print("Id : ${Locations[0]["id"]}");
@@ -373,15 +376,15 @@ int totalEarning = 0;
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child :Column(
-
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(MassageData, style: TextStyle(
+                          Text(NotificationBody, style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
                             color: Colors.black
                           ),),
-                          Text(NotificationBody, style: TextStyle(
+                          Text(MassageData, style: TextStyle(
                               fontSize: 12,
                               color: Colors.black
                           ),)
