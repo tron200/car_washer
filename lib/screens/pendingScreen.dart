@@ -25,20 +25,36 @@ class _PendingScreenState extends State<PendingScreen>{
 
   List<dynamic> list = [];
   Future<void> getPendingRequests() async {
+
     Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
-    requestHelp.requestGet(url,header).then((responce){
-      if (responce.statusCode == 200) {
+    requestHelp.requestGet(url,header).then((response){
+      if (response.statusCode == 200) {
+        print("::::: ${json.decode(response.body)}");
+
         setState(() {
-          list =  json.decode(responce.body);
+          list =  json.decode(response.body);
           list = list.where((element) => element["request_status"] == "pending").toList();
+          hideLoading();
+
         });
 
 
+      }else{
+        hideLoading();
       }
 
     });
+
+  }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
 
   }
 
@@ -48,7 +64,7 @@ class _PendingScreenState extends State<PendingScreen>{
       padding: const EdgeInsets.only(top: 10.0),
       itemBuilder: (BuildContext context,int index){
         return  Container(
-
+          margin: EdgeInsets.symmetric(vertical: 5),
           height: MediaQuery.of(context).size.height /5,
           child: Card(
 
@@ -97,22 +113,39 @@ class _PendingScreenState extends State<PendingScreen>{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ElevatedButton(onPressed: () async {
+                          showLoading();
                           Uri uri = Uri.parse(url_help.acceptRequest);
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
                           };
-                          await requestHelp.requestPost(uri, body).then((value) => getPendingRequests());
-                        }, child: Text("Accept"),style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          await requestHelp.requestPost(uri, body).then((value){
+                            getPendingRequests();
+
+                          });
+                        }, child: Text("Accept",style: TextStyle(
+                            color: Colors.white
+                              )),style: ElevatedButton.styleFrom(
+                            primary: Colors.green,
+                            padding: EdgeInsets.all(8),
+                            elevation: 10,
+                            shadowColor: Colors.green
                         ),),
                         ElevatedButton(onPressed: () async {
+                          showLoading();
                           Uri uri = Uri.parse(url_help.cancelRequest);
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
                           };
-                          await requestHelp.requestPost(uri, body).then((value) => getPendingRequests());
-                        }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
-                          primary: Colors.red,
+                          await requestHelp.requestPost(uri, body).then((value){
+                            getPendingRequests().then((value) => hideLoading());
+                          });
+                        }, child: Text("Cancel",style: TextStyle(
+                          color: Colors.white
+                        ),),style: ElevatedButton.styleFrom(
+                            primary: Colors.red,
+                            padding: EdgeInsets.all(8),
+                            elevation: 10,
+                            shadowColor: Colors.red
                         ),),
 
                       ],
@@ -196,11 +229,14 @@ class _PendingScreenState extends State<PendingScreen>{
       },
     );
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     WidgetsFlutterBinding.ensureInitialized();
+    showLoading();
+
     getPendingRequests();
   }
   @override

@@ -6,9 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:car_washer/Helper/request_helper.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../Helper/url_helper.dart' as url_helper;
 
 class HistoryScreen extends StatefulWidget{
+  String id;
+  HistoryScreen({required this.id});
   @override
   _HistoryScreenState createState() => _HistoryScreenState();
 }
@@ -26,30 +29,43 @@ class _HistoryScreenState extends State<HistoryScreen>{
 
 
   Future<dynamic> getAllRequests() async {
-    Uri url = Uri.parse("${url_help.getAllReguests}275");
+    Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
         // print(json.decode(responce.body));
         requests =  json.decode(responce.body);
-        setState(() {
-          complete = requests.where((element) => element["request_status"] == "complete").toList();
-          cancelled = requests.where((element) => element["request_status"] == "cancelled").toList();
-          scheduled = requests.where((element) => element["request_status"] == "scheduled").toList();
-        });
 
+        complete = requests.where((element) => element["request_status"] == "complete").toList();
+        cancelled = requests.where((element) => element["request_status"] == "cancelled").toList();
+        scheduled = requests.where((element) => element["request_status"] == "scheduled").toList();
+        hideLoading();
 
+      }else{
+        hideLoading();
       }
 
     });
+
+  }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
 
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getAllRequests();
+    showLoading();
+    getAllRequests().then((value){
+      setState(() {});
+    });
   }
 
   @override
@@ -110,6 +126,7 @@ class _PastRidesTapState extends State<PastRidesTap>{
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
         return  Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
           height: MediaQuery.of(context).size.height / 6,
           child: FlipCard(
 
@@ -282,6 +299,8 @@ class CancelledRidesTap extends StatelessWidget{
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
         return  Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+
           height: MediaQuery.of(context).size.height / 6,
           child: FlipCard(
 
@@ -411,6 +430,8 @@ class ScheduledRidesTap extends StatelessWidget{
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
         return  Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
+
           height: MediaQuery.of(context).size.height / 6,
           child: FlipCard(
 

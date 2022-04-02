@@ -6,6 +6,7 @@ import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:car_washer/Helper/request_helper.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../Helper/url_helper.dart' as url_helper;
 
 class ProcessingScreen extends StatefulWidget{
@@ -31,14 +32,12 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
         print(json.decode(responce.body));
-        setState(() {
-          list = json.decode(responce.body);
-          list =
-              list.where((element) => element["request_status"] == "processing")
-                  .toList();
-        });
+        list =  json.decode(responce.body);
+        list = list.where((element) => element["request_status"] == "processing").toList();
+        hideLoading();
       }else{
         print("not 200");
+        hideLoading();
       }
 
 
@@ -46,11 +45,21 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
     });
 
   }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
+
+  }
   Widget ListHistory(List<dynamic> list){
     return ListView.builder(
       itemCount: list.length,
       itemBuilder: (BuildContext context,int index){
         return  Container(
+          margin: EdgeInsets.symmetric(vertical: 5),
           height: MediaQuery.of(context).size.height / 5,
           child: Card(
             margin: EdgeInsets.symmetric(vertical: 10),
@@ -93,18 +102,26 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ElevatedButton(onPressed: () async {
+                            ElevatedButton(
+                                onPressed: () async {
+                              showLoading();
                               Uri uri = Uri.parse(url_help.completeRequest);
                               Map<String,dynamic> body = {
                                 "request_id" : list[index]['id'],
                               };
                               await requestHelp.requestPost(uri, body).then((value) => getPendingData());
                             }, child: Text("Finish",style: TextStyle(
-                              color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15,
-                            ),),  style: ElevatedButton.styleFrom(
-                                primary: Colors.red,
-                              padding: EdgeInsets.all(8)
-                            ))
+                              color: Colors.white,fontWeight: FontWeight.bold,fontSize: 15,
+                              )),
+                                style: ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                    padding: EdgeInsets.all(8),
+                                    elevation: 10,
+                                    shadowColor: Colors.red
+                                )
+                            )
+
+
                           ],
                         ),
                       )
@@ -125,6 +142,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    showLoading();
     getPendingData().then((value){
       setState(() {});
     });

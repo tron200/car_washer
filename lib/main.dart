@@ -75,7 +75,6 @@ class MyApp extends StatelessWidget {
           'summary': (context) => SummaryScreen(),
           'earning': (context) => EarningScreen(),
           'withdraw': (context) => WithdrawScreen(),
-          'history': (context) => HistoryScreen(),
           'notification': (context) => NotificationScreen(),
           'help': (context) => HelpScreen(),
           'review': (context) => ReviewScreen(),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:car_washer/screens/historyScreen.dart';
 import 'package:car_washer/screens/pendingScreen.dart';
 
 import '../Helper/url_helper.dart' as url_helper;
@@ -195,7 +196,8 @@ class _myDrawerState extends State<myDrawer> {
             title: const Text('History'),
             onTap: () {
               isSelected[1]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'history');
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
+                  HistoryScreen(id: "${get["id"]}")));
             },
             selected: isSelected[1],
           ),
