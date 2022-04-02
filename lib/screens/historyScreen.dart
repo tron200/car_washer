@@ -27,6 +27,7 @@ class _HistoryScreenState extends State<HistoryScreen>{
   List<dynamic> scheduled = [];
   List<dynamic> requests = [];
 
+  String image = "";
 
   Future<dynamic> getAllRequests() async {
     Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
@@ -58,6 +59,7 @@ class _HistoryScreenState extends State<HistoryScreen>{
     await EasyLoading.dismiss();
 
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -159,12 +161,18 @@ class _PastRidesTapState extends State<PastRidesTap>{
                         ),
                         Row(
                           children: [
-                            Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,),
+                            list[index]["picture"] == ""?
+                            Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height / 18,):
+                            CircleAvatar(
+                              backgroundImage: NetworkImage("https://lamaah.ae/storage/app/public/${list[index]["picture"]}"),
+
+                            ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Mohammed"),
-                                Text("Total: 12 AED", style: TextStyle(
+                                Text("${list[index]["user_name"]}"),
+                                Text("Service Name : ${list[index]["service_name"]}"),
+                                Text("Total: ${list[index]["price"]} AED", style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15
                                 ),)
@@ -337,7 +345,7 @@ class CancelledRidesTap extends StatelessWidget{
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Mohammed"),
+                            Text("${list[index]["user_name"]}"),
                             Text("Total: 12 AED", style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15
@@ -468,7 +476,7 @@ class ScheduledRidesTap extends StatelessWidget{
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Mohammed"),
+                            Text("${list[index]["user_name"]}"),
                             Text("Total: 12 AED", style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15

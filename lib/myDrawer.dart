@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:badges/badges.dart';
+import 'package:car_washer/screens/editServicesScreen.dart';
 import 'package:car_washer/screens/historyScreen.dart';
 import 'package:car_washer/screens/pendingScreen.dart';
+import 'package:car_washer/screens/servicesScreen.dart';
 
 import '../Helper/url_helper.dart' as url_helper;
 import 'package:car_washer/screens/profileScreen.dart';
@@ -12,6 +14,7 @@ import 'package:sizer/sizer.dart';
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:car_washer/screens/documentsScreen.dart';
 
+import 'chooseLocationScreen.dart';
 import 'screens/processingScreen.dart';
 import './globals.dart' as globals;
 
@@ -269,6 +272,22 @@ class _myDrawerState extends State<myDrawer> {
                   HistoryScreen(id: "${get["id"]}")));
             },
             selected: isSelected[1],
+          ),
+          ListTile(
+            title: const Text('Edit Services'),
+            onTap: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                  EditServicesScreen(id: "${get["id"]}", Allservices: get,)));
+            },
+          ),
+          ListTile(
+            title: const Text('Change Your Location'),
+            onTap: () {
+
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                  chooseLocationScreen(id: "${get["id"]}")));
+            },
           ),
           ListTile(
             title: const Text('Change Language'),

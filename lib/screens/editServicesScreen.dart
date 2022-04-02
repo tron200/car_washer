@@ -13,14 +13,15 @@ import 'package:car_washer/Helper/url_helper.dart' as url_helper;
 
 import '../Helper/request_helper.dart';
 
-class ServicesScreen extends StatefulWidget{
+class EditServicesScreen extends StatefulWidget{
   String id;
-  ServicesScreen({required this.id });
+  Map<String, dynamic> Allservices;
+  EditServicesScreen({required this.id, required this.Allservices });
   @override
-  _ServicesScreenState createState() => _ServicesScreenState();
+  _EditServicesScreenState createState() => _EditServicesScreenState();
 }
 
-class _ServicesScreenState extends State<ServicesScreen>{
+class _EditServicesScreenState extends State<EditServicesScreen>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   List<bool> values = [];
@@ -80,59 +81,39 @@ class _ServicesScreenState extends State<ServicesScreen>{
   void showError(String msg){
     EasyLoading.showError(msg);
   }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getAllServices().then((value){
-      setState(() {});
+
+      for(int i= 0 ; i<servicesControllers.length;i++){
+          for(int j = 0; j < widget.Allservices["service"].length;j++){
+            if(servicesControllers[i].getServiceId() == widget.Allservices["service"][j]["service_type_id"]){
+              setState(() {
+              servicesControllers[i].getController().text = widget.Allservices["service"][j]["service_price"];
+              values[i] = true;
+              });
+              print(servicesControllers);
+              break;
+            }
+          }
+        }
+
     });
     id = widget.id;
   }
-  int count = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         backgroundColor: Colors.blue.shade800,
-        title: Text("Services"),
+        title: Text("Edit Services"),
         actions: [
           TextButton(
             child: Text("Done"),
             onPressed: (){
-              count = 0;
-              for(int i = 0; i < servicesControllers.length; i++) {
-
-                if (servicesControllers[i]
-                    .getController()
-                    .text
-                    .isEmpty && values[i] == true) {
-                  showError("You Have to put Price on checked Services");
-                  return;
-                }else if(servicesControllers[i].getController().text.isEmpty || !values[i]){
-                  count = (count +1) ;
-                  print(count);
-                  if(count == 4){
-                    showError("Please Check atleast One Service");
-                  }
-                }
-                else {
-                  print("id: ${servicesControllers[i]
-                      .getServiceId()}  Price: ${servicesControllers[i]
-                      .getController()
-                      .text}");
-                }
-
-
-              }
-              setProviderServices().then((value){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => chooseLocationScreen(id: id,)));
-              });
-
-
-
 
             },
           ),
@@ -143,53 +124,53 @@ class _ServicesScreenState extends State<ServicesScreen>{
           onPressed: (){
             Navigator.pop(context);
           },
-          
+
         ),
       ),
       body:  ListView.builder(
-            padding: EdgeInsets.all(12),
-            itemCount: _services.length,
-            itemBuilder: (BuildContext context, int index){
-              return Container(
-                margin: EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
+        padding: EdgeInsets.all(12),
+        itemCount: _services.length,
+        itemBuilder: (BuildContext context, int index){
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 10),
+            child: Column(
+              children: [
+                index == 0?
+                Row(
                   children: [
-                    index == 0?
-                    Row(
-                      children: [
-                        Expanded(child: Text("Available"),flex: 1,),
-                        Expanded(child: Container(child: Text("ٍService Name")
-                          , margin: EdgeInsets.only(left: 8, top: 5),
-                        ),flex: 2,),
-                        Expanded(child: Text("Service Price (AED)"),flex: 3,)
-                      ],
-                    ): Container(),
-                    Row(
-                      children: [
-                        Expanded(child: Checkbox(value: values[index], onChanged: (value){
-                          setState(() {
-                            values[index] = value!;
-                          });
-                        }),flex: 1,),
-                        Expanded(child: Container(child: Text(_services[index]["name"]), margin: EdgeInsets.only(left: 8),),flex: 2,),
-                        Expanded(child: TextField(
-                          decoration: InputDecoration(
-                            hintText: "Price (AED)",
-                          ),
-                          enabled: values[index],
+                    Expanded(child: Text("Available"),flex: 1,),
+                    Expanded(child: Container(child: Text("ٍService Name")
+                      , margin: EdgeInsets.only(left: 8, top: 5),
+                    ),flex: 2,),
+                    Expanded(child: Text("Service Price (AED)"),flex: 3,)
+                  ],
+                ): Container(),
+                Row(
+                  children: [
+                    Expanded(child: Checkbox(value: values[index], onChanged: (value){
+                      setState(() {
+                        values[index] = value!;
+                      });
+                    }),flex: 1,),
+                    Expanded(child: Container(child: Text(_services[index]["name"]), margin: EdgeInsets.only(left: 8),),flex: 2,),
+                    Expanded(child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Price (AED)",
+                      ),
+                      enabled: values[index],
 
-                          controller: servicesControllers[index].getController(),
+                      controller: servicesControllers[index].getController(),
 
-                        ),flex: 3,)
-                      ],
-                    ),
+                    ),flex: 3,)
                   ],
                 ),
-              );
-            },
-          ),
-        
-     
+              ],
+            ),
+          );
+        },
+      ),
+
+
     );
   }
 }
