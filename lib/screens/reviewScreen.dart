@@ -45,7 +45,7 @@ class _ReviewScreenState extends State<ReviewScreen>{
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.account_circle_rounded, size: 60,),
+                        Icon(Icons.account_circle_rounded, size: MediaQuery.of(context).size.height/18,),
 
                         Align(
                           alignment: Alignment.centerRight,
@@ -57,9 +57,11 @@ class _ReviewScreenState extends State<ReviewScreen>{
                         fontWeight: FontWeight.bold,
                         fontSize: 15
                     ),),
-                    Text("Date: ${list[index]["date"]}", style: TextStyle(
-                        fontWeight: FontWeight.bold
-                    ),)
+                    Expanded(
+                      child: Text("Date: ${list[index]["date"]}", style: TextStyle(
+                          fontWeight: FontWeight.bold
+                      ),),
+                    )
                   ],
                 ),
               ),
@@ -73,21 +75,27 @@ class _ReviewScreenState extends State<ReviewScreen>{
               ),
               color: Colors.greenAccent,
               child:
-              Padding(
-                padding: EdgeInsets.all(12),
-                child: ReadMoreText(
-                      "Comment: ${list[index]["comment"]}",
-                      key: UniqueKey(),
-                      trimLines: 4,
-                      colorClickableText: Colors.blue.shade800,
-                      trimMode: TrimMode.Line,
-                      trimCollapsedText: 'Show more',
-                      trimExpandedText: 'Show less',
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.black),
+              Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: ReadMoreText(
+                            "Comment: ${list[index]["comment"]}",
+                            key: UniqueKey(),
+                            trimLines: 4,
+                            colorClickableText: Colors.blue.shade800,
+                            trimMode: TrimMode.Line,
+                            trimCollapsedText: 'Show more',
+                            trimExpandedText: 'Show less',
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,color: Colors.black),
+                          ),
+
+
+
                     ),
-
-
-
+                  ),
+                ],
               ),),
           ),
         );
@@ -103,7 +111,7 @@ class _ReviewScreenState extends State<ReviewScreen>{
       "car_name": "Fiat 128",
       "rating": "5.00",
       "date": "13-12-2000",
-      "comment": "Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service  ",
+      "comment": "Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good ServicVery Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service Very Good Service  ",
       "payment_type": "Cash",
       "tax": "5.00",
       "commission": " 13.00",

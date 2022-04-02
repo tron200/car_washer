@@ -2,7 +2,6 @@ import 'package:car_washer/bageIcon.dart';
 import 'package:car_washer/myDrawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 class EarningScreen extends StatelessWidget{
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();

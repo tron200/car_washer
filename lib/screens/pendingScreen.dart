@@ -30,10 +30,9 @@ class _PendingScreenState extends State<PendingScreen>{
 
     requestHelp.requestGet(url,header).then((responce){
       if (responce.statusCode == 200) {
-        print("::::: ${json.decode(responce.body)}");
         setState(() {
           list =  json.decode(responce.body);
-
+          list = list.where((element) => element["request_status"] == "pending").toList();
         });
 
 
@@ -102,7 +101,7 @@ class _PendingScreenState extends State<PendingScreen>{
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
                           };
-                          await requestHelp.requestPost(uri, body);
+                          await requestHelp.requestPost(uri, body).then((value) => getPendingRequests());
                         }, child: Text("Accept"),style: ElevatedButton.styleFrom(
                           primary: Colors.green,
                         ),),
@@ -111,7 +110,7 @@ class _PendingScreenState extends State<PendingScreen>{
                           Map<String,dynamic> body = {
                             "request_id" : list[index]['id'],
                           };
-                          await requestHelp.requestPost(uri, body);
+                          await requestHelp.requestPost(uri, body).then((value) => getPendingRequests());
                         }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
                           primary: Colors.red,
                         ),),

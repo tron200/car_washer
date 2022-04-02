@@ -31,17 +31,21 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
         print(json.decode(responce.body));
-        list =  json.decode(responce.body);
-        list = list.where((element) => element["request_status"] == "processing").toList();
-
+        setState(() {
+          list = json.decode(responce.body);
+          list =
+              list.where((element) => element["request_status"] == "processing")
+                  .toList();
+        });
       }else{
         print("not 200");
       }
 
+
+
     });
 
   }
-
   Widget ListHistory(List<dynamic> list){
     return ListView.builder(
       itemCount: list.length,
@@ -72,7 +76,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                       ),
                       Row(
                         children: [
-                          Icon(Icons.account_circle_rounded, size: 60,),
+                          Icon(Icons.account_circle_rounded, size:MediaQuery.of(context).size.height / 18),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -89,8 +93,14 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ElevatedButton(onPressed: (){}, child: Text("Finish",style: TextStyle(
-                              color: Colors.black
+                            ElevatedButton(onPressed: () async {
+                              Uri uri = Uri.parse(url_help.completeRequest);
+                              Map<String,dynamic> body = {
+                                "request_id" : list[index]['id'],
+                              };
+                              await requestHelp.requestPost(uri, body).then((value) => getPendingData());
+                            }, child: Text("Finish",style: TextStyle(
+                              color: Colors.black,fontWeight: FontWeight.bold,fontSize: 15,
                             ),),  style: ElevatedButton.styleFrom(
                                 primary: Colors.red,
                               padding: EdgeInsets.all(8)

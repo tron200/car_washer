@@ -26,13 +26,13 @@ class _HistoryScreenState extends State<HistoryScreen>{
 
 
   Future<dynamic> getAllRequests() async {
-    Uri url = Uri.parse("${url_help.getAllReguests}2");
+    Uri url = Uri.parse("${url_help.getAllReguests}275");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
     await requestHelp.requestGet(url,header).then((responce) async {
       if (responce.statusCode == 200) {
         // print(json.decode(responce.body));
-        requests =  json.decode(responce.body)["requests"];
+        requests =  json.decode(responce.body);
         setState(() {
           complete = requests.where((element) => element["request_status"] == "complete").toList();
           cancelled = requests.where((element) => element["request_status"] == "cancelled").toList();
@@ -197,10 +197,12 @@ class _PastRidesTapState extends State<PastRidesTap>{
                         Text("Commision: 0 AED", style: TextStyle(
                           fontSize: 15,
                         ),),
-                        Text("Total: 0 AED", style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),)
+                        Expanded(
+                          child: Text("Total: 0 AED", style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),),
+                        )
 
                       ],
                     ),
@@ -367,10 +369,12 @@ class CancelledRidesTap extends StatelessWidget{
                     Text("Commision: 0 AED", style: TextStyle(
                       fontSize: 15,
                     ),),
-                    Text("Total: 0 AED", style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),)
+                    Expanded(
+                      child: Text("Total: 0 AED", style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),),
+                    )
 
                   ],
                 ),
@@ -494,10 +498,12 @@ class ScheduledRidesTap extends StatelessWidget{
                     Text("Commision: 0 AED", style: TextStyle(
                       fontSize: 15,
                     ),),
-                    Text("Total: 0 AED", style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                    ),)
+                    Expanded(
+                      child: Text("Total: 0 AED", style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                      ),),
+                    )
 
                   ],
                 ),
