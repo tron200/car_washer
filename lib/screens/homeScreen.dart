@@ -363,7 +363,10 @@ int totalEarning = 0;
                 curve: Curves.fastOutSlowIn,
                 child: GestureDetector(
                   onTap: (){
-                    _height = 0;
+                    setState(() {
+                      _height = 0;
+
+                    });
                   },
                   child: Card(
 
