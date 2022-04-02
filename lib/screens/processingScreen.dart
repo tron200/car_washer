@@ -110,7 +110,7 @@ class _ProcessingScreenState extends State<ProcessingScreen>{
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             ElevatedButton(
-                                onPressed:isLoading? null: () async {
+                                onPressed:isLoading? (){}: () async {
                               showLoading();
                               Uri uri = Uri.parse(url_help.completeRequest);
                               Map<String,dynamic> body = {
