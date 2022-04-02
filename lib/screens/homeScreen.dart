@@ -114,14 +114,14 @@ class _HomeScreenState extends State<HomeScreen>{
         setState(() {
           userDauserta = json.decode(user!);
           // print(userDauserta);
-          setState(() {
+
             lat = double.parse(userDauserta["latitude"]);
             lon = double.parse(userDauserta["longitude"]);
             _center =  LatLng(lat, lon);
             title = userDauserta["service_status"] == "active"?"Online": "Offline";
             value_switch = (title == "Online")? true: false;
 
-          });
+
           
         });
         await prefs.setString("userjson", user!);

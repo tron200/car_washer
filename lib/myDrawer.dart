@@ -124,14 +124,14 @@ class _myDrawerState extends State<myDrawer> {
                           radius: 6.5.h,
                           backgroundColor: Colors.transparent,
                         ),
-                        onTap:() {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfileScreen(name: get["first_name"],
-                                    image: image,
-                                    email: get["email"],
-                                    number: get["mobile"],)));
-                        }
+                        // onTap:() {
+                        //   Navigator.push(context, MaterialPageRoute(
+                        //       builder: (context) =>
+                        //           ProfileScreen(name: get["first_name"],
+                        //             image: image,
+                        //             email: get["email"],
+                        //             number: get["mobile"],)));
+                        // }
                       ),
 
                       // IconButton(onPressed: (){
@@ -201,14 +201,14 @@ class _myDrawerState extends State<myDrawer> {
             },
             selected: isSelected[1],
           ),
-          ListTile(
-            title: const Text('My Earning'),
-            onTap: () {
-              isSelected[2]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'earning');
-            },
-            selected: isSelected[2],
-          ),
+          // ListTile(
+          //   title: const Text('My Earning'),
+          //   onTap: () {
+          //     isSelected[2]? Navigator.pop(context):
+          //     Navigator.pushReplacementNamed(context, 'earning');
+          //   },
+          //   selected: isSelected[2],
+          // ),
           ListTile(
             title: const Text('Pending Requests'),
             onTap: () {
@@ -246,22 +246,22 @@ class _myDrawerState extends State<myDrawer> {
             },
             selected: isSelected[7],
           ),
-          ListTile(
-            title: const Text('Withdraw'),
-            onTap: () {
-              isSelected[8]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'withdraw');
-            },
-            selected: isSelected[8],
-          ),
-          ListTile(
-            title: const Text('Help'),
-            onTap: () {
-              isSelected[9]? Navigator.pop(context):
-              Navigator.pushReplacementNamed(context, 'help');
-            },
-            selected: isSelected[9],
-          ),
+          // ListTile(
+          //   title: const Text('Withdraw'),
+          //   onTap: () {
+          //     isSelected[8]? Navigator.pop(context):
+          //     Navigator.pushReplacementNamed(context, 'withdraw');
+          //   },
+          //   selected: isSelected[8],
+          // ),
+          // ListTile(
+          //   title: const Text('Help'),
+          //   onTap: () {
+          //     isSelected[9]? Navigator.pop(context):
+          //     Navigator.pushReplacementNamed(context, 'help');
+          //   },
+          //   selected: isSelected[9],
+          // ),
           ListTile(
             title: const Text('Change Language'),
             onTap: null,
