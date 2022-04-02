@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../Helper/url_helper.dart' as url_helper;
+import 'package:car_washer/globals.dart'as globals;
 
 class PendingScreen extends StatefulWidget{
   String id;
@@ -65,6 +66,8 @@ class _PendingScreenState extends State<PendingScreen>{
   }
 
   Widget ListHistory(List<dynamic> list){
+    WidgetsFlutterBinding.ensureInitialized();
+
     return ListView.builder(
       itemCount: list.length,
       padding: const EdgeInsets.only(top: 10.0),
@@ -252,6 +255,9 @@ class _PendingScreenState extends State<PendingScreen>{
     showLoading();
 
     getPendingRequests();
+    setState(() {
+      globals.text = 0;
+    });
   }
   @override
   Widget build(BuildContext context) {
