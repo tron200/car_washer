@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         routes: {
           'login' : (context) => login(),
           'register': (context) => register(),
-          'home': (context) => HomeScreen(isRedirect: false,),
+          'home': (context) => HomeScreen(),
           'summary': (context) => SummaryScreen(),
           'earning': (context) => EarningScreen(),
           'withdraw': (context) => WithdrawScreen(),

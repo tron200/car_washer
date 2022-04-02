@@ -16,14 +16,13 @@ class chooseLocationScreen extends StatefulWidget{
 class _chooseLocationScreenState extends State<chooseLocationScreen>{
   request_helper requestHelp = new request_helper();
   url_helper.Constants url_help = new url_helper.Constants();
-  late String id;
   Location location = new Location();
   late LocationData _locationData;
 
   Future<void> setProviderLocation(LatLng x) async{
     Uri uri = Uri.parse(url_help.setProviderLocation);
     Map<String, dynamic> body= {
-      "provider_id": id,
+      "provider_id": widget.id,
       "latitude": x.latitude,
       "longitude": x.longitude
     };
@@ -60,7 +59,6 @@ class _chooseLocationScreenState extends State<chooseLocationScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    id = widget.id;
     getCurrentLocation().then((value){
       x = _locationData.latitude!;
       y = _locationData.longitude!;
@@ -163,7 +161,7 @@ class _chooseLocationScreenState extends State<chooseLocationScreen>{
                   ElevatedButton(onPressed: (){
                     markedLocation != LatLng(0,0)?
                     setProviderLocation(markedLocation).then((value){
-                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen(isRedirect: true,)),  (route) => false);
+                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen()),  (route) => false);
                     }): null;
                   }, child: Text("Done"))
                 ],

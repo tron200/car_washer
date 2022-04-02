@@ -17,9 +17,6 @@ import 'package:car_washer/globals.dart'as globals;
 
 
 class HomeScreen extends StatefulWidget{
-  bool isRedirect;
-
-  HomeScreen({required this.isRedirect});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -191,9 +188,6 @@ int totalEarning = 0;
   void initState() {
     // TODO: implement initState
     super.initState();
-    isRedirect = widget.isRedirect;
-    isRedirect?Navigator.push(context, MaterialPageRoute(builder: (context) => DocumentScreen(id: userDauserta["id"],)))
-        : null;
     getProfileData();
     getWashesData();
     getTotalEarning();

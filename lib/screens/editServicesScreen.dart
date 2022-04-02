@@ -77,7 +77,15 @@ class _EditServicesScreenState extends State<EditServicesScreen>{
       }
     });
   }
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
 
+  }
   void showError(String msg){
     EasyLoading.showError(msg);
   }
@@ -85,12 +93,14 @@ class _EditServicesScreenState extends State<EditServicesScreen>{
   void initState() {
     // TODO: implement initState
     super.initState();
+    showLoading();
     getAllServices().then((value){
 
       for(int i= 0 ; i<servicesControllers.length;i++){
           for(int j = 0; j < widget.Allservices["service"].length;j++){
             if(servicesControllers[i].getServiceId() == widget.Allservices["service"][j]["service_type_id"]){
               setState(() {
+                hideLoading();
               servicesControllers[i].getController().text = widget.Allservices["service"][j]["service_price"];
               values[i] = true;
               });
