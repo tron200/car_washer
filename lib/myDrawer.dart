@@ -194,15 +194,7 @@ class _myDrawerState extends State<myDrawer> {
             },
             selected: isSelected[0],
           ),
-          ListTile(
-            title: const Text('History'),
-            onTap: () {
-              isSelected[1]? Navigator.pop(context):
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
-                  HistoryScreen(id: "${get["id"]}")));
-            },
-            selected: isSelected[1],
-          ),
+
           // ListTile(
           //   title: const Text('My Earning'),
           //   onTap: () {
@@ -245,14 +237,14 @@ class _myDrawerState extends State<myDrawer> {
             selected: isSelected[5],
           ),
 
-          ListTile(
-            title: const Text('Notification'),
-            onTap: () {
-              isSelected[7]? Navigator.pop(context):
-              Navigator.pushNamed(context, 'notification');
-            },
-            selected: isSelected[7],
-          ),
+          // ListTile(
+          //   title: const Text('Notification'),
+          //   onTap: () {
+          //     isSelected[7]? Navigator.pop(context):
+          //     Navigator.pushNamed(context, 'notification');
+          //   },
+          //   selected: isSelected[7],
+          // ),
           // ListTile(
           //   title: const Text('Withdraw'),
           //   onTap: () {
@@ -269,6 +261,15 @@ class _myDrawerState extends State<myDrawer> {
           //   },
           //   selected: isSelected[9],
           // ),
+          ListTile(
+            title: const Text('History'),
+            onTap: () {
+              isSelected[1]? Navigator.pop(context):
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) =>
+                  HistoryScreen(id: "${get["id"]}")));
+            },
+            selected: isSelected[1],
+          ),
           ListTile(
             title: const Text('Change Language'),
             onTap: null,
