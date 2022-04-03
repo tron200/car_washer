@@ -117,7 +117,7 @@ class _otpVerficationState extends State<otpVerfication>{
         // Sign the user in (or link) with the auto-generated credential
         await auth.signInWithCredential(credential);
       }, verificationFailed: (FirebaseAuthException error) {
-        hideLoading();
+      hideLoading();
     },
       codeAutoRetrievalTimeout: (String verificationId){
         hideLoading();
@@ -161,7 +161,8 @@ class _otpVerficationState extends State<otpVerfication>{
             hideLoading();
             //login?
             await prefs.setString("access_token", json.decode(response.body)["access_token"]);
-            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)),  (route) => false);
+            print(json.decode(response.body)["id"].runtimeType);
+            // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)),  (route) => false);
           } else {
             hideLoading();
             showError("registration error");

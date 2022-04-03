@@ -6,6 +6,7 @@ import '../Helper/url_helper.dart' as url_helper;
 import 'package:car_washer/Helper/request_helper.dart';
 import 'package:geocode/geocode.dart';
 import 'package:car_washer/screens/homeScreen.dart';
+import 'package:sizer/sizer.dart';
 
 class chooseLocationScreen extends StatefulWidget{
   String id;
@@ -84,7 +85,7 @@ class _chooseLocationScreenState extends State<chooseLocationScreen>{
             markers: _markers,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
-            padding: EdgeInsets.only(top: 50),
+            padding: EdgeInsets.only(top: 15.0.h ,bottom: MediaQuery.of(context).size.height / 4.5),
             onTap: (click) async{
               print("CLICKED");
               setState(() {

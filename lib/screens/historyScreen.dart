@@ -346,10 +346,12 @@ class CancelledRidesTap extends StatelessWidget{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("${list[index]["user_name"]}"),
-                            Text("Total: 12 AED", style: TextStyle(
+                            Text("Service Name : ${list[index]["service_name"]}"),
+                            Text("Total: ${list[index]["price"]} AED", style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15
                             ),)
+
                           ],
                         )
                       ],
@@ -477,10 +479,12 @@ class ScheduledRidesTap extends StatelessWidget{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("${list[index]["user_name"]}"),
-                            Text("Total: 12 AED", style: TextStyle(
+                            Text("Service Name : ${list[index]["service_name"]}"),
+                            Text("Total: ${list[index]["price"]} AED", style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15
                             ),)
+
                           ],
                         )
                       ],

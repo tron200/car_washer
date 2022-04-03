@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:car_washer/chooseLocationScreen.dart';
 import 'package:car_washer/myDrawer.dart';
+import 'package:car_washer/screens/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -89,30 +90,33 @@ class _EditServicesScreenState extends State<EditServicesScreen>{
   void showError(String msg){
     EasyLoading.showError(msg);
   }
+  void fill(){
+    for(int i= 0 ; i<servicesControllers.length;i++){
+      for(int j = 0; j < widget.Allservices["service"].length;j++){
+        if(servicesControllers[i].getServiceId() == widget.Allservices["service"][j]["service_type_id"]){
+          setState(() {
+            hideLoading();
+            servicesControllers[i].getController().text = widget.Allservices["service"][j]["service_price"];
+            values[i] = true;
+          });
+          print(servicesControllers);
+          break;
+        }
+      }
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     showLoading();
     getAllServices().then((value){
-
-      for(int i= 0 ; i<servicesControllers.length;i++){
-          for(int j = 0; j < widget.Allservices["service"].length;j++){
-            if(servicesControllers[i].getServiceId() == widget.Allservices["service"][j]["service_type_id"]){
-              setState(() {
-                hideLoading();
-              servicesControllers[i].getController().text = widget.Allservices["service"][j]["service_price"];
-              values[i] = true;
-              });
-              print(servicesControllers);
-              break;
-            }
-          }
-        }
-
+      fill();
     });
     id = widget.id;
   }
+  int count = 0 ;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,6 +128,37 @@ class _EditServicesScreenState extends State<EditServicesScreen>{
           TextButton(
             child: Text("Done"),
             onPressed: (){
+              count = 0;
+              for(int i = 0; i < servicesControllers.length; i++) {
+
+                if (servicesControllers[i]
+                    .getController()
+                    .text
+                    .isEmpty && values[i] == true) {
+                  showError("You Have to put Price on checked Services");
+                  return;
+                }else if(servicesControllers[i].getController().text.isEmpty || !values[i]){
+                  count = (count +1) ;
+                  print(count);
+                  if(count == 4){
+                    showError("Please Check atleast One Service");
+                  }
+                }
+                else {
+                  print("id: ${servicesControllers[i]
+                      .getServiceId()}  Price: ${servicesControllers[i]
+                      .getController()
+                      .text}");
+                }
+
+
+              }
+              setProviderServices().then((value){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+              });
+
+
+
 
             },
           ),

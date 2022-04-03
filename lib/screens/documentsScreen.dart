@@ -52,7 +52,6 @@ class _DocumentScreenState extends State<DocumentScreen>{
 
           AllDocuments = json.decode(responce.body);
 
-
         }
 
     });
@@ -107,7 +106,6 @@ bool there = false;
 
         documents = json.decode(responce.body);
         int length = documents.length;
-        setState(() {
           print(AllDocuments);
           for(int i = 0; i < AllDocuments.length; i++){
             there = false;
@@ -122,22 +120,36 @@ bool there = false;
 
             }
             if(there == false){
-              documents.add(
-                  {
-                    "id": AllDocuments[i]["id"],
-                    "name":AllDocuments[i]["name"],
-                    "status": "MISSING",
+              setState(() {
+                documents.add(
+                    {
+                      "id": AllDocuments[i]["id"],
+                      "name":AllDocuments[i]["name"],
+                      "status": "MISSING",
 
-                  }
-              );
+                    }
+                );
+              });
+
+
             }
 
           }
           // print(documents);
-        });
+          hideLoading();
       }
 
     });
+
+  }
+
+  void showLoading() async{
+    await EasyLoading.show(
+        status: 'loading...',
+        maskType: EasyLoadingMaskType.black);
+  }
+  void hideLoading() async{
+    await EasyLoading.dismiss();
 
   }
 
@@ -283,6 +295,7 @@ bool there = false;
   void initState() {
     // TODO: implement initState
     super.initState();
+    showLoading();
     getProviderDocuments().then((value){
       getDocuments();
     });
@@ -362,11 +375,12 @@ bool there = false;
                             ),),
                             TextButton(onPressed: (){
                               // print(file.readAsStringSync());
-
+                              showLoading();
                               uploadDocuments(file, _dateTime.split(" ")[0], "${documents[_current]["id"]}").then((value){
                                 getDocuments();
                                 setState(() {
                                   _height = 0;
+                                  _dateTime = "";
                                 });
                               });
 

@@ -237,10 +237,8 @@ class _registerstate extends State<register> {
 
          FirebaseMessaging.instance.getToken().then((Dtoken) async {
           final prefs = await SharedPreferences.getInstance();
-          url_helper.Constants constants = new url_helper.Constants();
-          request_helper request_help = new request_helper();
+
           await getDeviceDetails();
-          Uri uri = Uri.parse(constants.register);
 
 
           Map<String, dynamic> body = {
@@ -249,7 +247,7 @@ class _registerstate extends State<register> {
             "device_token": Dtoken,
             "login_by": "manual",
             "first_name": _nameController.text,
-            "email": _emailController.text,
+            "email": _emailController.text.trim(),
             "password": _passwordController.text,
             "dialCodesDigits":dialCodesDigits,
             "mobile": "${s}"

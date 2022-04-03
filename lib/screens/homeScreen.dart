@@ -147,21 +147,16 @@ int totalEarning = 0;
       }
     });
   }
-  int make = 0;
+  String make = " ";
   Future<void> getWashesData() async {
     Uri url = Uri.parse(url_help.getWashes);
     Map<String, String> body = {
       "provider_id": "${userDauserta["id"]}"
     };
-
-
-
-
     requestHelp.requestPost(url,body).then((responce) async {
       if(responce.statusCode == 200) {
-
         setState(() {
-          make =  json.decode(responce.body)["service_make"]==null?0:json.decode(responce.body)["service_make"];
+          make =  json.decode(responce.body)["service_make"]==null?"0":json.decode(responce.body)["service_make"];
         });
       }else{
         print(responce.statusCode);
@@ -189,8 +184,7 @@ int totalEarning = 0;
     // TODO: implement initState
     super.initState();
     getProfileData();
-    getWashesData();
-    getTotalEarning();
+
     getLocations();
 
   }
@@ -198,8 +192,12 @@ int totalEarning = 0;
   String NotificationBody = "";
   @override
   Widget build(BuildContext context) {
-
+    if(make == " "){
+      getWashesData();
+    }
+    getTotalEarning();
     Color blue800 = Colors.blue.shade800;
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
 
@@ -243,11 +241,13 @@ int totalEarning = 0;
                   ),
                   myLocationEnabled: true,
                   myLocationButtonEnabled: true,
-                  padding: EdgeInsets.only(top: 10.0.h ,bottom: MediaQuery.of(context).size.height / 6.4),
+                  padding: EdgeInsets.only(top: 15.0.h ,bottom: MediaQuery.of(context).size.height / 6.4),
                   markers: _markers,
                   onTap: (click){
                     print(click);
                   },
+                  trafficEnabled: true,
+
                 ),
 
               ),
@@ -325,7 +325,7 @@ int totalEarning = 0;
                                           ),
                                 ),
 
-                                Text("$make", style: TextStyle(
+                                Text(make, style: TextStyle(
                                     fontSize: 18,
                                     color: Colors.black
                                 ),),
@@ -521,6 +521,8 @@ int totalEarning = 0;
         ),
     );
   }
+
+
 
 
 }
