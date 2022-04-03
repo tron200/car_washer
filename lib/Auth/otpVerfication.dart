@@ -157,13 +157,20 @@ class _otpVerficationState extends State<otpVerfication>{
         Uri uri = Uri.parse(url_help.register);
         request_help.requestPost(uri, body).then((response) async{
           if (response.statusCode == 200) {
-            print(response.body);
-            hideLoading();
-            //login?
-            await prefs.setString("access_token", json.decode(response.body)["access_token"]);
-            print(json.decode(response.body)["id"].runtimeType);
-            // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: json.decode(response.body)["id"],)),  (route) => false);
-          } else {
+            print(json.decode(response.body));
+            // if(json.decode(response.body)["error"] == true){
+            //   hideLoading();
+            //   showError("The email has already been taken.");
+            //
+            // }else {
+              hideLoading();
+              //login?
+              await prefs.setString("access_token", json.decode(response.body)[0]["access_token"]);
+              // print(json.decode(response.body)["id"].runtimeType);
+              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: "${json.decode(response.body)[0]["id"]}",)),  (route) => false);
+            // }
+          }
+          else {
             hideLoading();
             showError("registration error");
 
