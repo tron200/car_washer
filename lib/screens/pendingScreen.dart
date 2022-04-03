@@ -30,7 +30,7 @@ class _PendingScreenState extends State<PendingScreen>{
     Uri url = Uri.parse("${url_help.getAllReguests}${widget.id}");
     Map<String, String> header = {'Content-Type': 'application/json; charset=UTF-8'};
 
-    requestHelp.requestGet(url,header).then((response){
+    await requestHelp.requestGet(url,header).then((response){
       if (response.statusCode == 200) {
         print("::::: ${json.decode(response.body)}");
 

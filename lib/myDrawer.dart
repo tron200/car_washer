@@ -45,6 +45,7 @@ class _myDrawerState extends State<myDrawer> {
       print(value.body);
       await prefs.setString("userjson", "");
       print(await prefs.getString("userjson"));
+      prefs.clear();
       Navigator.pushNamedAndRemoveUntil(context, 'login', (route) => false);
     }).onError((error, stackTrace){
       print(error.toString());

@@ -109,21 +109,23 @@ class _registerstate extends State<register> {
 
   }
 
-  Future<void> isMobileTaken (String phoneController) async{
+  Future<bool> isMobileTaken (String phoneController) async{
     Uri uri = Uri.parse(url_help.isMobileTaken);
 
     Map <String, dynamic> body = {
       "mobile": "${phoneController.trim()}"
     };
-
+    print("phoneController ${phoneController.trim()}");
     await requestHelp.requestPost(uri, body).then((response){
       if(json.decode(response.body)["msg"] == "Available"){
-        isAvailable =true;
+        print("AvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailableAvailable");
+        return true;
       }else{
-        isAvailable =false;
+        return false;
       }
 
     });
+    return true;
   }
 
   Widget userInput(TextEditingController userInput, String hintTitle, TextInputType keyboardType, IconData icon, bool secure) {
@@ -207,9 +209,12 @@ class _registerstate extends State<register> {
     void register() async{
 
       showLoading();
-      String s = _phoneController.text[0] =="0"?_phoneController.text.substring(1):_phoneController.text;
+      String s = _phoneController.text[0] =="0"?"$dialCodesDigits${_phoneController.text.substring(1)}":_phoneController.text;
       print(s);
-      await isMobileTaken(s);
+      await isMobileTaken(s).then((bool){
+        isAvailable = bool;
+
+      });
       if (_emailController.text.isEmpty || _passwordController.text.isEmpty || _nameController.text.isEmpty){
         hideLoading();
         showError('Please put some Data');

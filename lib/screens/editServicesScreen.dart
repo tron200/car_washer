@@ -72,7 +72,7 @@ class _EditServicesScreenState extends State<EditServicesScreen>{
       "service_price" : servicesPrices
 
     };
-    requestHelp.requestPost(uri, body).then((response){
+    await requestHelp.requestPost(uri, body).then((response){
       if(response.statusCode == 200){
         print(response.body);
       }

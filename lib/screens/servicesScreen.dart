@@ -22,7 +22,6 @@ class ServicesScreen extends StatefulWidget{
 
 class _ServicesScreenState extends State<ServicesScreen>{
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
   List<bool> values = [];
   List<dynamic> _services = [];
   String id = "";
@@ -45,12 +44,8 @@ class _ServicesScreenState extends State<ServicesScreen>{
           servicesControllers.add(new Service(TextEditingController(), element["id"]));
         });
       }
-
     });
-
   }
-
-
 
   List<dynamic> servicesId = [];
   List<dynamic> servicesPrices = [];

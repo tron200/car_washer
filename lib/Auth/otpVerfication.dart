@@ -49,6 +49,7 @@ class _otpVerficationState extends State<otpVerfication>{
     // TODO: implement initState
     super.initState();
     body = widget.body;
+    print("------------------------------------------------- $body");
   }
   static String verificationId1 = "";
   static bool recived = false;
@@ -89,7 +90,7 @@ class _otpVerficationState extends State<otpVerfication>{
             pinAnimationType: PinAnimationType.rotation,
             onSubmit: (pin) async{
               try{
-                verifyPhone();
+                verifyPhone(widget.body);
 
                 // String dialCodesDigits = body['dialCodesDigits'];
                 // String phone = body['mobile'];
@@ -124,7 +125,10 @@ class _otpVerficationState extends State<otpVerfication>{
       },
       codeSent: (String verificationId, int? forceResendingToken) async {
         // Create a PhoneAuthCredential with the code
+        setState(() {
+
         verificationId1 = verificationId;
+        });
         recived = true;
 
         // Sign the user in (or link) with the credential
@@ -144,18 +148,18 @@ class _otpVerficationState extends State<otpVerfication>{
   void showError(String msg){
     EasyLoading.showError(msg);
   }
-  verifyPhone() async {
+  verifyPhone(Map<String, dynamic> body) async {
     final prefs = await SharedPreferences.getInstance();
     FirebaseAuth auth = FirebaseAuth.instance;
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId1, smsCode: _otpController.text);
     showLoading();
-    await auth.signInWithCredential(credential).then((value){
+    await auth.signInWithCredential(credential).then((value) async {
       if(value.user != null){
         url_helper.Constants url_help = new url_helper.Constants();
         request_helper request_help = new request_helper();
         Uri uri = Uri.parse(url_help.register);
-        request_help.requestPost(uri, body).then((response) async{
+        await request_help.requestPost(uri, body).then((response) async{
           if (response.statusCode == 200) {
             print(json.decode(response.body));
             // if(json.decode(response.body)["error"] == true){
@@ -165,15 +169,15 @@ class _otpVerficationState extends State<otpVerfication>{
             // }else {
               hideLoading();
               //login?
-              await prefs.setString("access_token", json.decode(response.body)[0]["access_token"]);
+              await prefs.setString("access_token", json.decode(response.body)[0]["access_token"]); //elmo4kela fe el satr daaaaaaaaaaaaa
               // print(json.decode(response.body)["id"].runtimeType);
+            print("aywaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
               Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => ServicesScreen(id: "${json.decode(response.body)[0]["id"]}",)),  (route) => false);
             // }
           }
           else {
             hideLoading();
             showError("registration error");
-
           }
         });
       }

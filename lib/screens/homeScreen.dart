@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen>{
             value_switch = (title == "Online")? true: false;
 
 
-          
+
         });
         await prefs.setString("userjson", user!);
       }else{
@@ -138,7 +138,6 @@ int totalEarning = 0;
 
     requestHelp.requestGet(url, header).then((response){
       if(response.statusCode == 200){
-        print("::::::::${response.body}");
         setState(() {
           totalEarning = json.decode(response.body);
         });
